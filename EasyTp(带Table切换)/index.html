@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EasyTp智能交警平台</title>
+    <!-- zui -->
+    <link href="css/zui.min.css" rel="stylesheet">
+    <link rel="stylesheet " href="css/EasyTp.css " type="text/css " />
+     <!-- jQuery (ZUI中的Javascript组件依赖于jQuery) -->
+     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <!-- ZUI Javascript组件 -->
+    <script src="js/zui.min.js"></script>
+  </head>
+    <body>
+    	 <div class="header">
+    	<div class="header_content">
+    		
+    		<img  class="declare" src="img/Easy-TP@2x.png" />
+    <ul>
+    	<li class="noline"><a href="#"><img  src="img/header_icon_user@2x.png"/><p>你好，管理员！</p></a></li>
+    	<li><a href="#"><img  src="img/header_icon_info@2x.png"/><p>关于</p></a></li>
+    	<li><a href="#"><img  src="img/header_icon_notifie@2x.png"/><p>公告</p></a></li>
+    	<li><a href="#"><img  src="img/header_icon_logout@2x.png"/><p class="exit">退出</p></a></li>
+    </ul>
+
+    	</div>
+    </div>
+    
+    
+    <iframe class="frameSet1" id="framSet1" scrolling="no" frameborder="0" src="left.html"  width="14%"  onload="changeFrameHeight()"></iframe>
+    <iframe class="frameSet2" id="framSet1" scrolling="no" frameborder="0" src="right.html" height="800"  width="86%" name="view_frame"  onload="changeFrameHeight()"></iframe>
+    
+    	<script>
+    		
+
+    function changeFrameHeight(){
+        var ifm= document.getElementById("framSet1"); 
+        ifm.height=document.documentElement.clientHeight;
+
+    }
+
+    window.onresize=function(){  
+         changeFrameHeight();  
+
+    } 
+
+ </script>
+
+    </body>
+
+    
+  
+ 
+</html>

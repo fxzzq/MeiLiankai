@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用户管理</title>
+		<link href="css/zui.min.css" rel="stylesheet">
+		<link href="css/UserManager.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="userManager">
+	    			<div class="hot_title">
+						<div class="titleTP">
+							<ul>
+								<div class="navSet"><li><a href="javascript:;" class="active" x=0>主页</a></li></div>
+								
+								<div class="navSet"><li><a href="javascript:;" x=1>用户管理</a></li></div>
+								<div class="navSet"><li><a href="javascript:;" x=2>用户查询</a></li></div>
+								<div class="navSet"><li><a href="javascript:;" x=3>账号管理</a></li></div>
+							</ul>
+						</div>
+					</div>
+		
+<script type="text/javascript">
+	//tab切换  
+	var oTitle = document.getElementsByClassName('hot_title')[0];
+	var imglist = document.getElementsByClassName('hot_content');
+	var btn = oTitle.getElementsByTagName('a'); 
+	for(var i = 0; i < btn.length; i++) {
+	btn[i].onclick = function() { 
+	for(var j = 0; j < btn.length; j++) {
+	btn[j].className = '';
+	imglist[j].style.display = 'none';
+	imglist[j].style.fontWeight = 'bold';
+	
+	}
+	this.className = 'active';
+	imglist[this.getAttribute('x')].style.display = 'block';
+	
+	}
+	}
+</script>
+
+<div class="hot_content  clearfix" style="display: block;">
+		1
+		
+		</div>
+
+
+		<div class="hot_content  clearfix">
+			<form action="#" method="post">
+			<div class="inputarea">
+				<div class="row">
+				  <div class="col-md-3"><span>姓名:</span><input type="text" ></div>
+				  <div class="col-md-3"><span>电话:</span><input type="text"></div>
+				  <div class="col-md-3"><span>大队:</span><input type="text" ></div>
+				  <div class="col-md-3"><span>拼音:</span><input type="text" ></div>
+				  
+				</div>
+					
+		    </div>
+		    
+		    
+	    	<div class="operation">
+				<button class="btn" type="submit"><img src="img/bt_icon_new@2x.png"/>新增</button>
+				<button class="btn" type="submit"><img src="img/bt_icon_search@2x.png"/>查询</button>
+				<button class="btn" type="reset"><img src="img/bt_icon_reset@2x.png"/>重置</button>
+	     	</div>
+			</form>
+			
+			<div class="show_data">
+		 		<table class="table table-striped  table-hover table-bordered">
+				  <thead>
+				    <tr>
+				      <th>选择</th>
+				      <th>姓名</th>
+				      <th>电话</th>
+				      <th>拼音</th>
+				      <th>大队</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				    <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				    <tr>
+				      <td><input type="checkbox"></td>
+				      <td>李四</td>
+				      <td>13228225435</td>
+				      <td>Li Si</td>
+				      <td>洪雅三中队</td>
+				    </tr>
+				      <tr>
+				      <td><input type="checkbox"></td>
+				      <td>王五</td>
+				      <td>13228225435</td>
+				      <td>Wang Wu</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				       <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				   
+				   
+				       <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				       <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>成渝一中队</td>
+				    </tr>
+				  </tbody>
+				  <tfoot>
+				    <tr>
+				      <td><input type="checkbox"></td>
+				      <td>张三</td>
+				      <td>13228225435</td>
+				      <td>Zhang San</td>
+				      <td>雅西一中队</td>
+				    </tr>
+				  </tfoot>
+				</table>
+			</div>
+		
+		<!--分页处理-->
+		<div class="pageInfo">			
+			<ul>
+			  <li><a href="#"><img src="img/icon_1stpage@2x.png" /></a></li>
+			  <li class="previous"><a href="#">	<img src="img/icon_prepage@2x.png" /></a></li>
+			  <p>第
+			  	<input type="text" class="pageInput">
+			  	<span>页,</span>
+			  	共24页
+			  </p>
+			  <li class="next"><a href="#"><img src="img/icon_nextpage@2x.png"/></a></li>
+			  <li><a href="#"><img src="img/icon_lastpage@2x.png" /></a></li>
+	          <li><a href="#"><img src="img/page_icon_refresh@2x.png"/></a></li>
+			</ul>
+		</div>
+		<br />
+		
+		<!--底部-->
+		<div class="foot">
+			<p>Copyright&copy;2016-2018MELOCLAN TECNOLOGY.ALLRights Reserved</p>
+		</div>
+		
+		
+		</div><!--用户管理hot_content 结束-->
+		
+		
+		
+		<div class="hot_content  clearfix">
+		3
+		
+		</div>
+		<div class="hot_content  clearfix">
+		4
+		
+		</div>
+		</div>
+	</body>
+</html>

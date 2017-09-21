@@ -1,0 +1,163 @@
+@charset "UTF-8";
+* {
+	padding: 0px;
+	margin: 0px;
+	/*清除所有标签的默认空隙*/
+}
+
+ul,ol{
+	list-style: none;/*清除列表符号*/
+}
+a{
+	text-decoration: none;
+}
+
+
+
+.inputarea{
+	width: 100%;
+	height: 60px;
+	background: #FFFFFF;
+	
+	padding-left: 20px;	
+}
+.inputarea input  {
+		width: 200px;
+		height: 26px;
+		margin-top: 15px;
+		border: 1px solid #DFE6ED;
+	    
+}
+
+
+.inputarea span{
+	font-size: 12px;
+	/*margin-left: 20px;*/
+}
+
+
+
+.operation {
+	width: 100%;
+	height: 46px;
+/*	padding: 20px 10px;*/
+ 
+	float: right;
+    background: #eef1f5;
+    border: 1px #dfe6ed solid;
+} 
+.operation button{
+	font-size: 12px;
+	color: #44aeeb;
+	margin-right: 48px;
+	   margin-top: 10px;
+	margin-bottom: 10px;
+	width: 68px;
+	height: 26px;
+	border: solid 1px #44AEEB;
+	float: right;
+	
+	
+}
+
+/*分页处理*/
+.pageInfo{
+	background:#eef1f5;
+}
+
+.pageInfo ul li{
+	float:left;
+	margin-right: 10px;
+}
+.pageInfo ul p{
+	float: left;
+	margin-right: 10px;
+	color: #8ba1be;
+}
+.pageInput{
+	width: 30px;
+	height: 16px;
+	border: 1px solid #44AEEB;
+	color: #44AEEB;
+	
+}
+
+/*底部*/
+.foot{
+	
+background:#eef1f5;
+}
+.foot p{
+	font-family: arial;
+     font-size: 12px;
+     color: #8ba1be;	
+     text-align: center;
+}
+
+
+/*Tab切换处理*/
+.clearfix:after {
+	content: '\20';
+	display: block;
+	clear: both;
+}
+.hot_content {
+	
+	display: none;
+	/*隐藏下面的盒子*/
+}
+
+.titleTP {
+	float: left;
+	height: 34px;
+	width: 100%;
+	background: #2E4050;	
+}
+
+.hot_title{
+	
+}
+
+
+.hot_title ul {
+	list-style: none;
+}
+
+.hot_title li {
+	
+	float: left;
+	margin: 10px 25px;
+	
+}
+
+.hot_title li a {
+	font-size: 12px;
+	color: #CFE3F6;
+	text-decoration: none;
+	margin-left: -25px;
+	
+}
+
+.hot_title li a.active {
+	color: #2e3254;
+	font-weight: bold;
+	background: #FFFFFF;
+	
+}
+
+
+.navSet li{
+	width: 100px;
+	height: 10px;
+	
+}
+.navSet li a.active{
+	
+	background:#FFFFFF; 
+	padding-top: 5px;
+	padding-bottom: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
+    text-align: center;
+    
+}
