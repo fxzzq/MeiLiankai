@@ -1,0 +1,28 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+
+h1{
+	font-size: 30px;
+	text-align: center;
+}
+button{
+	width: 100px;
+	height: 50px;
+	
+}
+#numgroup{
+	
+	margin: auto;
+	/* text-align:center;*/
+}
+#dianmin{
+	margin: auto;
+	 text-align:center;
+}
+
+#restart a{
+	text-decoration: none;
+	color: #fff;
+}

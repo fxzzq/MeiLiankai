@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>4班随机点名</title>
+		<link href="css/zui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/random.css" />
+		<script src="js/jquery-3.2.1.min.js"></script>
+		<script src="js/zui.min.js"></script>
+	</head>
+
+	<body>
+		<h1>4班随机点名</h1>
+		<div class="row" style="text-align: center;" >
+			<div class="col-md-4">
+				<button class="btn btn-danger " type="button">讲台左边</button>
+			</div>
+			<div class="col-md-4">
+				<button class="btn btn-danger " type="button">讲台中间</button>
+			</div>
+			<div class="col-md-4">
+				<button class="btn btn-danger " type="button">讲台右边</button>
+			</div>
+
+		</div>
+		<div class="row" id="numgroup">
+
+			<div class="col-md-3">
+
+				<button class="btn btn-primary " type="button" id="btnum1" value="1">1</button>
+				<button class="btn btn-primary " type="button" id="btnum2" value="2">2</button>
+				<button class="btn btn-primary " type="button" id="btnum3" value="3">3</button>
+
+			</div>
+
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum4" value="4">4</button>
+
+				<button class="btn btn-primary " type="button" id="btnum5" value="5">5</button>
+				<button class="btn btn-primary " type="button" id="btnum6" value="6">6</button>
+				<button class="btn btn-primary " type="button" id="btnum7" value="7">7</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum8" value="8">8</button>
+				<button class="btn btn-primary " type="button" id="btnum9" value="9">9</button>
+				<button class="btn btn-primary " type="button" id="btnum10" value="10">10</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum11" value="11">11</button>
+				<button class="btn btn-primary " type="button" id="btnum12" value="12">12</button>
+				<button class="btn btn-primary " type="button" id="btnum13" value="13">13</button>
+			</div>
+
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum14" value="14">14</button>
+				<button class="btn btn-primary " type="button" id="btnum15" value="15">15</button>
+				<button class="btn btn-primary " type="button" id="btnum16" value="16">16</button>
+				<button class="btn btn-primary " type="button" id="btnum17" value="17">17</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum18" value="18">18</button>
+				<button class="btn btn-primary " type="button" id="btnum19" value="19">19</button>
+				<button class="btn btn-primary " type="button" id="btnum20" value="20">20</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum21" value="21">21</button>
+				<button class="btn btn-primary " type="button" id="btnum22" value="22">22</button>
+				<button class="btn btn-primary " type="button" id="btnum23" value="23">23</button>
+			</div>
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum24" value="24">24</button>
+				<button class="btn btn-primary " type="button" id="btnum25" value="25">25</button>
+				<button class="btn btn-primary " type="button" id="btnum26" value="26">26</button>
+				<button class="btn btn-primary " type="button" id="btnum27" value="27">27</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum28" value="28">28</button>
+				<button class="btn btn-primary " type="button" id="btnum29" value="29">29</button>
+				<button class="btn btn-primary " type="button" id="btnum30" value="30">30</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum31" value="31">31</button>
+				<button class="btn btn-primary " type="button" id="btnum32" value="32">32</button>
+				<button class="btn btn-primary " type="button" id="btnum33" value="33">33</button>
+			</div>
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum34" value="34">34</button>
+				<button class="btn btn-primary " type="button" id="btnum35" value="35">35</button>
+				<button class="btn btn-primary " type="button" id="btnum36" value="36">36</button>
+				<button class="btn btn-primary " type="button" id="btnum37" value="37">37</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum38" value="38">38</button>
+				<button class="btn btn-primary " type="button" id="btnum39" value="39">39</button>
+				<button class="btn btn-primary " type="button" id="btnum40" value="40">40</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum41" value="41">41</button>
+				<button class="btn btn-primary " type="button" id="btnum42" value="42">42</button>
+				<button class="btn btn-primary " type="button" id="btnum43" value="43">43</button>
+			</div>
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum44" value="44">44</button>
+				<button class="btn btn-primary " type="button" id="btnum45" value="45">45</button>
+				<button class="btn btn-primary " type="button" id="btnum46" value="46">46</button>
+				<button class="btn btn-primary " type="button" id="btnum47" value="47">47</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum48" value="48">48</button>
+				<button class="btn btn-primary " type="button" id="btnum49" value="49">49</button>
+				<button class="btn btn-primary " type="button" id="btnum50" value="50">50</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum51" value="51">51</button>
+				<button class="btn btn-primary " type="button" id="btnum52" value="52">52</button>
+				<button class="btn btn-primary " type="button" id="btnum53" value="53">53</button>
+			</div>
+
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum54" value="54">54</button>
+				<button class="btn btn-primary " type="button" id="btnum55" value="55">55</button>
+				<button class="btn btn-primary " type="button" id="btnum56" value="56">56</button>
+				<button class="btn btn-primary " type="button" id="btnum57" value="57">57</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum58" value="58">58</button>
+				<button class="btn btn-primary " type="button" id="btnum59" value="59">59</button>
+				<button class="btn btn-primary " type="button" id="btnum60" value="60">60</button>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum61" value="61">61</button>
+				<button class="btn btn-primary " type="button" id="btnum62" value="62">62</button>
+				<button class="btn btn-primary " type="button" id="btnum63" value="63">63</button>
+			</div>
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum64" value="64">64</button>
+				<button class="btn btn-primary " type="button" id="btnum65" value="65">65</button>
+				<button class="btn btn-primary " type="button" id="btnum66" value="66">66</button>
+				<button class="btn btn-primary " type="button" id="btnum67" value="67">67</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum68" value="68">68</button>
+				<button class="btn btn-primary " type="button" id="btnum69" value="69">69</button>
+				<button class="btn btn-primary " type="button" id="btnum70" value="70">70</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum71" value="71">71</button>
+				<button class="btn btn-primary " type="button" id="btnum72" value="72">72</button>
+				<button class="btn btn-primary " type="button" id="btnum73" value="73">73</button>
+			</div>
+			<div class="col-md-6" style="text-align: center;">
+				<button class="btn btn-primary " type="button" id="btnum74" value="74">74</button>
+				<button class="btn btn-primary " type="button" id="btnum75" value="75">75</button>
+				<button class="btn btn-primary " type="button" id="btnum76" value="76">76</button>
+				<button class="btn btn-primary " type="button" id="btnum77" value="77">77</button>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary " type="button" id="btnum78" value="78">78</button>
+				<button class="btn btn-primary " type="button" id="btnum79" value="79">79</button>
+				<button class="btn btn-primary " type="button" id="btnum80" value="80">80</button>
+			</div>
+
+		</div>
+
+		<div id="dianmin">
+			<button class="btn btn-success " type="button" onclick="doAlert()">点名</button>
+			<button class="btn btn-warning " type="button" id="restart" onclick="window.location='index.html'">重新开始</button>
+
+		</div>
+
+		<script>
+			function doAlert() {
+
+				var num = Math.random(); //Math.random()：得到一个0到1之间的随机数
+				num = Math.ceil(num * 80); //num*80的取值范围在0~80之间,使用向上取整就可以得到一个1~80的随机数
+				//alert(num);
+				//	alert("111:" + document.getElementById('btnum1').value);
+				if(num == document.getElementById('btnum1').value) {
+
+					var btn1 = document.getElementById('btnum1');
+					btn1.style.background = "red";
+
+				} else if(num == document.getElementById('btnum2').value) {
+					var btn2 = document.getElementById('btnum2');
+					btn2.style.background = "red";
+
+				} else if(num == document.getElementById('btnum3').value) {
+
+					var btn3 = document.getElementById('btnum3');
+					btn3.style.background = "red";
+
+				} else if(num == document.getElementById('btnum4').value) {
+
+					var btn4 = document.getElementById('btnum4');
+					btn4.style.background = "red";
+
+				} else if(num == document.getElementById('btnum5').value) {
+
+					var btn5 = document.getElementById('btnum5');
+					btn5.style.background = "red";
+				} else if(num == document.getElementById('btnum6').value) {
+					var btn6 = document.getElementById('btnum6');
+					btn6.style.background = "red";
+				} else if(num == document.getElementById('btnum7').value) {
+
+					var btn7 = document.getElementById('btnum7');
+					btn7.style.background = "red";
+				} else if(num == document.getElementById('btnum8').value) {
+
+					var btn8 = document.getElementById('btnum8');
+					btn8.style.background = "red";
+				} else if(num == document.getElementById('btnum9').value) {
+
+					var btn9 = document.getElementById('btnum9');
+					btn9.style.background = "red";
+				} else if(num == document.getElementById('btnum10').value) {
+					var btn10 = document.getElementById('btnum10');
+					btn10.style.background = "red";
+				} else if(num == document.getElementById('btnum11').value) {
+					var btn11 = document.getElementById('btnum11');
+					btn11.style.background = "red";
+				} else if(num == document.getElementById('btnum12').value) {
+					var btn12 = document.getElementById('btnum12');
+					btn12.style.background = "red";
+				} else if(num == document.getElementById('btnum13').value) {
+					var btn13 = document.getElementById('btnum13');
+					btn13.style.background = "red";
+				} else if(num == document.getElementById('btnum14').value) {
+					var btn14 = document.getElementById('btnum14');
+					btn14.style.background = "red";
+				} else if(num == document.getElementById('btnum15').value) {
+					var btn15 = document.getElementById('btnum15');
+					btn15.style.background = "red";
+				} else if(num == document.getElementById('btnum16').value) {
+					var btn16 = document.getElementById('btnum16');
+					btn16.style.background = "red";
+				} else if(num == document.getElementById('btnum17').value) {
+					var btn17 = document.getElementById('btnum17');
+					btn17.style.background = "red";
+				} else if(num == document.getElementById('btnum18').value) {
+					var btn18 = document.getElementById('btnum18');
+					btn18.style.background = "red";
+				} else if(num == document.getElementById('btnum19').value) {
+					var btn19 = document.getElementById('btnum19');
+					btn19.style.background = "red";
+				} else if(num == document.getElementById('btnum20').value) {
+					var btn20 = document.getElementById('btnum20');
+					btn20.style.background = "red";
+				} else if(num == document.getElementById('btnum21').value) {
+					var btn21 = document.getElementById('btnum21');
+					btn21.style.background = "red";
+				} else if(num == document.getElementById('btnum22').value) {
+					var btn22 = document.getElementById('btnum22');
+					btn22.style.background = "red";
+				} else if(num == document.getElementById('btnum23').value) {
+					var btn23 = document.getElementById('btnum23');
+					btn23.style.background = "red";
+				} else if(num == document.getElementById('btnum24').value) {
+					var btn24 = document.getElementById('btnum24');
+					btn24.style.background = "red";
+				} else if(num == document.getElementById('btnum25').value) {
+					var btn25 = document.getElementById('btnum25');
+					btn25.style.background = "red";
+				} else if(num == document.getElementById('btnum26').value) {
+					var btn26 = document.getElementById('btnum26');
+					btn26.style.background = "red";
+				} else if(num == document.getElementById('btnum27').value) {
+					var btn27 = document.getElementById('btnum27');
+					btn27.style.background = "red";
+				} else if(num == document.getElementById('btnum28').value) {
+					var btn28 = document.getElementById('btnum28');
+					btn28.style.background = "red";
+				} else if(num == document.getElementById('btnum29').value) {
+					var btn29 = document.getElementById('btnum29');
+					btn29.style.background = "red";
+				} else if(num == document.getElementById('btnum30').value) {
+					var btn30 = document.getElementById('btnum30');
+					btn30.style.background = "red";
+				} else if(num == document.getElementById('btnum31').value) {
+					var btn31 = document.getElementById('btnum31');
+					btn31.style.background = "red";
+				} else if(num == document.getElementById('btnum32').value) {
+					var btn32 = document.getElementById('btnum32');
+					btn32.style.background = "red";
+				} else if(num == document.getElementById('btnum33').value) {
+					var btn33 = document.getElementById('btnum33');
+					btn33.style.background = "red";
+				} else if(num == document.getElementById('btnum34').value) {
+					var btn34 = document.getElementById('btnum34');
+					btn34.style.background = "red";
+				} else if(num == document.getElementById('btnum35').value) {
+					var btn35 = document.getElementById('btnum35');
+					btn35.style.background = "red";
+				} else if(num == document.getElementById('btnum36').value) {
+					var btn36 = document.getElementById('btnum36');
+					btn36.style.background = "red";
+				} else if(num == document.getElementById('btnum37').value) {
+					var btn37 = document.getElementById('btnum37');
+					btn37.style.background = "red";
+				} else if(num == document.getElementById('btnum38').value) {
+					var btn38 = document.getElementById('btnum38');
+					btn38.style.background = "red";
+				} else if(num == document.getElementById('btnum39').value) {
+					var btn39 = document.getElementById('btnum39');
+					btn39.style.background = "red";
+				} else if(num == document.getElementById('btnum40').value) {
+					var btn40 = document.getElementById('btnum40');
+					btn40.style.background = "red";
+				} else if(num == document.getElementById('btnum41').value) {
+					var btn41 = document.getElementById('btnum41');
+					btn41.style.background = "red";
+				} else if(num == document.getElementById('btnum42').value) {
+					var btn42 = document.getElementById('btnum42');
+					btn42.style.background = "red";
+				} else if(num == document.getElementById('btnum43').value) {
+					var btn43 = document.getElementById('btnum43');
+					btn43.style.background = "red";
+				} else if(num == document.getElementById('btnum44').value) {
+					var btn44 = document.getElementById('btnum44');
+					btn44.style.background = "red";
+				} else if(num == document.getElementById('btnum45').value) {
+					var btn45 = document.getElementById('btnum45');
+					btn45.style.background = "red";
+				} else if(num == document.getElementById('btnum46').value) {
+					var btn46 = document.getElementById('btnum46');
+					btn46.style.background = "red";
+				} else if(num == document.getElementById('btnum47').value) {
+					var btn47 = document.getElementById('btnum47');
+					btn47.style.background = "red";
+				} else if(num == document.getElementById('btnum48').value) {
+					var btn48 = document.getElementById('btnum48');
+					btn48.style.background = "red";
+				} else if(num == document.getElementById('btnum49').value) {
+					var btn49 = document.getElementById('btnum49');
+					btn49.style.background = "red";
+				} else if(num == document.getElementById('btnum50').value) {
+					var btn50 = document.getElementById('btnum50');
+					btn50.style.background = "red";
+				} else if(num == document.getElementById('btnum51').value) {
+					var btn51 = document.getElementById('btnum51');
+					btn51.style.background = "red";
+				} else if(num == document.getElementById('btnum52').value) {
+					var btn52 = document.getElementById('btnum52');
+					btn52.style.background = "red";
+				} else if(num == document.getElementById('btnum53').value) {
+					var btn53 = document.getElementById('btnum53');
+					btn53.style.background = "red";
+				} else if(num == document.getElementById('btnum54').value) {
+					var btn54 = document.getElementById('btnum54');
+					btn54.style.background = "red";
+				} else if(num == document.getElementById('btnum55').value) {
+					var btn55 = document.getElementById('btnum55');
+					btn55.style.background = "red";
+				} else if(num == document.getElementById('btnum56').value) {
+					var btn56 = document.getElementById('btnum56');
+					btn56.style.background = "red";
+				} else if(num == document.getElementById('btnum57').value) {
+					var btn57 = document.getElementById('btnum57');
+					btn57.style.background = "red";
+				} else if(num == document.getElementById('btnum58').value) {
+					var btn58 = document.getElementById('btnum58');
+					btn58.style.background = "red";
+				} else if(num == document.getElementById('btnum59').value) {
+					var btn59 = document.getElementById('btnum59');
+					btn59.style.background = "red";
+				} else if(num == document.getElementById('btnum60').value) {
+					var btn60 = document.getElementById('btnum60');
+					btn60.style.background = "red";
+				} else if(num == document.getElementById('btnum60').value) {
+					var btn60 = document.getElementById('btnum60');
+					btn60.style.background = "red";
+				} else if(num == document.getElementById('btnum60').value) {
+					var btn60 = document.getElementById('btnum60');
+					btn60.style.background = "red";
+				} else if(num == document.getElementById('btnum61').value) {
+					var btn61 = document.getElementById('btnum61');
+					btn61.style.background = "red";
+				} else if(num == document.getElementById('btnum62').value) {
+					var btn62 = document.getElementById('btnum62');
+					btn62.style.background = "red";
+				} else if(num == document.getElementById('btnum63').value) {
+					var btn63 = document.getElementById('btnum63');
+					btn63.style.background = "red";
+				} else if(num == document.getElementById('btnum64').value) {
+					var btn64 = document.getElementById('btnum64');
+					btn64.style.background = "red";
+				} else if(num == document.getElementById('btnum65').value) {
+					var btn65 = document.getElementById('btnum65');
+					btn65.style.background = "red";
+				} else if(num == document.getElementById('btnum66').value) {
+					var btn66 = document.getElementById('btnum66');
+					btn66.style.background = "red";
+				} else if(num == document.getElementById('btnum67').value) {
+					var btn67 = document.getElementById('btnum67');
+					btn67.style.background = "red";
+				} else if(num == document.getElementById('btnum68').value) {
+					var btn68 = document.getElementById('btnum68');
+					btn68.style.background = "red";
+				} else if(num == document.getElementById('btnum69').value) {
+					var btn69 = document.getElementById('btnum69');
+					btn69.style.background = "red";
+				} else if(num == document.getElementById('btnum70').value) {
+					var btn70 = document.getElementById('btnum70');
+					btn70.style.background = "red";
+				} else if(num == document.getElementById('btnum71').value) {
+					var btn71 = document.getElementById('btnum71');
+					btn71.style.background = "red";
+				} else if(num == document.getElementById('btnum72').value) {
+					var btn72 = document.getElementById('btnum72');
+					btn72.style.background = "red";
+				} else if(num == document.getElementById('btnum73').value) {
+					var btn73 = document.getElementById('btnum73');
+					btn73.style.background = "red";
+				} else if(num == document.getElementById('btnum74').value) {
+					var btn74 = document.getElementById('btnum74');
+					btn74.style.background = "red";
+				} else if(num == document.getElementById('btnum75').value) {
+					var btn75 = document.getElementById('btnum75');
+					btn75.style.background = "red";
+				} else if(num == document.getElementById('btnum76').value) {
+					var btn76 = document.getElementById('btnum76');
+					btn76.style.background = "red";
+				} else if(num == document.getElementById('btnum77').value) {
+					var btn77 = document.getElementById('btnum77');
+					btn77.style.background = "red";
+				} else if(num == document.getElementById('btnum78').value) {
+					var btn78 = document.getElementById('btnum78');
+					btn78.style.background = "red";
+				} else if(num == document.getElementById('btnum79').value) {
+					var btn79 = document.getElementById('btnum79');
+					btn79.style.background = "red";
+				} else if(num == document.getElementById('btnum80').value) {
+					var btn80 = document.getElementById('btnum80');
+					btn80.style.background = "red";
+				}
+			}
+		</script>
+
+	</body>
+
+</html>
