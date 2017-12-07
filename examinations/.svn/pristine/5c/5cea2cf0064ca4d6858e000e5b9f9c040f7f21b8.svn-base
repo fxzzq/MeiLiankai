@@ -1,0 +1,2 @@
+-- 从1.0.0.x_alpha版本升级到1.0.0.20170920_alpha版本
+-- REPLACE INTO `TB_PLF_SYSTEM_INFO` (`name`,`value`) VALUES ('dbversion_','1.0.0.20170920_alpha');

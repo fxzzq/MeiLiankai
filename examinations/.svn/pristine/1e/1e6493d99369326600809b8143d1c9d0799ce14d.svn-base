@@ -1,0 +1,128 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	   	   
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	<mvc:resources location="/login.jsp" mapping="/login.jsp"/>
+	<context:component-scan base-package="com.minlength.platform.core.security" />
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+    <mvc:annotation-driven /> 
+		
+	<!-- 验证跳转管理器 -->
+	<bean id="authForwardManager" class="com.minlength.platform.core.security.manager.impl.AuthForwardManagerImpl">
+		<!-- form表单验证配置 -->
+		<property name="accountAndPasswordAuthPage" value="/login.jsp"/>
+		<property name="accountAndPasswordAuthSuccessPage" value="/view/index.html"/>
+		<property name="accountAndPasswordAuthFailPage" value="/index.jsp"/>
+	</bean>
+	
+	<!-- 票据管理器 -->
+	<bean id="ticketManager" class="com.minlength.platform.core.security.manager.impl.TicketManagerImpl">
+		<property name="processor" ref="webProcessor"/>
+		<property name="ticketLiveTime" value="600"/><!-- 票据的默认过期时间，单位秒 -->
+	</bean>
+	
+	<bean id="authManager" class="com.minlength.platform.core.security.manager.impl.AuthManagerImpl">
+		<property name="providers">
+			<map>
+				<!-- 表单验证 -->
+				<entry key="FORM_AUTH">
+					<bean id="accountAndPasswordAuthProvider" class="com.minlength.platform.core.security.manager.impl.AccountAndPasswordAuthProvider">
+						<property name="userDetailService" ref="userDetailService"/>
+						<property name="ticketManager" ref="ticketManager"/>
+					</bean>
+				</entry>
+				
+				<!-- 微信验证 -->
+				<entry key="ENTERPRISE_WEIXIN_AUTH">
+					<bean id="weixinAuthProvider" class="com.minlength.platform.component.weixin.service.impl.EnterpriseWeixinAuthProviderImpl">
+						<property name="ticketManager" ref="ticketManager"/>
+						<property name="authinfos">
+							<map>
+								
+								<!-- 教师 -->
+								<entry key="teacher">
+									<bean class="com.minlength.platform.component.weixin.service.impl.WeixinAuthInfo">
+										<property name="appid" value="teacher"/><!-- APPID -->
+										<property name="enterpriseWeixinInterfaceService" ref="teacherInterface"/><!-- 通信接口 -->
+										<property name="forwardPath" value="/Teacher/index.html"/><!-- APPID -->
+									</bean>
+								</entry>
+								
+								<!-- 学生 -->
+								<entry key="student">
+									<bean class="com.minlength.platform.component.weixin.service.impl.WeixinAuthInfo">
+										<property name="appid" value="student"/><!-- APPID -->
+										<property name="enterpriseWeixinInterfaceService" ref="studentInterface"/><!-- 通信接口 -->
+										<property name="forwardPath" value="/Student/index.html"/><!-- APPID -->
+									</bean>
+								</entry>
+								
+							</map>
+						</property>
+					</bean>
+				</entry>			
+			</map>
+		</property>		
+	</bean>
+	
+	<!-- 用户详细信息获取实现 -->
+	<bean id="userDetailService" class="com.minlength.proj.examinations.service.UserDetailServiceImpl"/>
+
+	<!-- 客户端鉴别器,以及收集一些客户端的信息 -->
+	<bean id="authClientDiscriminator" class="com.minlength.platform.core.security.manager.impl.AuthClientDiscriminatorImpl"/>
+	
+	<bean id="securityFilter" class="com.minlength.platform.core.security.filter.SecurityFilter">
+		<property name="authClientDiscriminator" ref="authClientDiscriminator"/><!-- 客户端鉴别器 -->
+		<property name="authForwardManager" ref="authForwardManager"/><!-- 认证跳转管理器 -->
+		<property name="authManager" ref="authManager"/><!-- 认证管理器 -->
+	
+		<!-- 需要进行权限验证的资源文件 -->
+		<property name="url_patterns">
+			<list>
+			</list>
+		</property>
+		
+		<!-- 需要忽略权限验证的资源文件 -->
+		<property name="url_ignore_patterns">
+			<list>
+				<value>^.*login\.jsp$</value>
+				<value>^.*/security/auth/.*\.action$</value>
+				<value>^.*/security/auth/.*\.html$</value>				
+				<value>^.*\.js$</value>
+				<value>^.*\.css$</value>
+				<value>^.*\.png$</value>
+				<value>^.*\.jpg$</value>
+				<value>^.*\.gif$</value>
+				<value>^.*import\.do$</value>
+				<value>^.*import\.action$</value>
+				<value>^.*downloadzip\.action$</value>
+				<value>^.*downloadexcel\.action$</value>
+			</list>
+		</property>
+	</bean>		
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->		
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+
+	
+</beans>

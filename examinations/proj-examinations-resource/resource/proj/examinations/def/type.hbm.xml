@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.type" table="TB_PROJ_EXAMINATIONS_TYPE">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" length="256">
+			<column name="name"></column>
+		</property><!-- 名称 -->
+		<property name="pid" type="long" >
+		    <column name="pid" not-null="true"></column>
+		</property><!-- 父级id -->
+	</class>
+	
+</hibernate-mapping>

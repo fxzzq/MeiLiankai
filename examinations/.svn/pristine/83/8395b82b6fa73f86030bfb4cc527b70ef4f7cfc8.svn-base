@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>文件上传</title>
+<#include "_import/import_css.html">
+</head>
+<body>
+<div id='myUploader' class="uploader" data-url="${basePath}upload.do?magicboy=yes&fid=${singlefid}&finstid=${finstid}">
+				  <div class="uploader-message text-center">
+				    <div class="content"></div>
+				    <button type="button" class="close">×</button>
+				  </div>
+				  <div class="uploader-files file-list file-list-lg" data-drag-placeholder="拖动文件到此处"></div>
+				  <div class="uploader-actions">
+				    <div class="uploader-status pull-right text-muted"></div>
+				    <button type="button" class="btn btn-link uploader-btn-browse"><i class="icon icon-plus"></i>选择文件</button>
+				    <button type="button" class="btn btn-link uploader-btn-start"><i class="icon icon-cloud-upload"></i>开始上传</button>
+				  </div>
+</body>
+<#include "_import/import_javascript.html">
+<script type="text/javascript">
+$(document).ready(function(){	
+	var options = {
+				url: '${basePath}upload.do?magicboy=yes&fid=${singlefid}&finstid=${finstid}',
+				filters:{
+					max_file_size:'4mb'
+				},
+				chunk_size:0,
+				limitFilesCount : 5,
+				max_retries : 0,
+				rename : false,
+				onFileUploaded:function(file,msg){
+					var obj = JSON.parse(msg.response);
+					alertSuccess('上传成功!');
+				},
+				onError : function(error){					
+					alertError(error.data.emsg);
+				}
+			};
+			$('#myUploader').uploader(options);
+});
+</script>
+</html>

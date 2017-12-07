@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="${basePath}_1/lib/mui/css/mui.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="${basePath}Student/css/Answer.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a id="fanhui" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left">返回</a>
+			<h1 class="mui-title">答题</h1>
+		</header>
+
+		<div class="mui-content">
+         
+	<div class="paperset">
+		<p id="title">受力分析随堂练习A</p>
+	
+	</div>
+	
+			<ul class="mui-table-view">
+				
+		
+				
+				
+				<li class="mui-table-view-cell listfont">
+					<span>1.</span>
+					<span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="radio1" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="radio1" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="radio1" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="radio1" type="radio">
+
+					</div>
+
+				</li>
+				<li class="mui-table-view-cell listfont">
+					<span>2.</span>
+						<span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="radio2" type="radio">
+
+					</div>
+				</li>
+				<li class="mui-table-view-cell listfont">
+					<span>3.</span>
+						<span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="radio2" type="radio">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="radio2" type="radio">
+
+					</div>
+				</li>
+			</ul>
+
+
+	<footer class="butn mui-content-padded" id="butn">
+				<button type="button" id="btn" class="meloclan-mui-btn mui-btn mui-btn-success " >提交</button>
+			</footer>
+	</div>
+		<script src="${basePath}_1/lib/mui/js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+		mui('#butn').on('tap','#btn',function(){
+		  mui.openWindow({
+		  	url:'${basePath}Student/AnswerResult.html'
+		  });
+		}) 
+		</script>
+	</body>
+
+</html>

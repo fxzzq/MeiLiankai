@@ -1,0 +1,10 @@
+<link rel="stylesheet" href="${basePath}_1/lib/zui/css/zui.min.css"/>
+<link rel="stylesheet" href="${basePath}_1/lib/zui/lib/datatable/zui.datatable.min.css">
+<link rel="stylesheet" href="${basePath}_1/lib/zui/lib/chosen/chosen.min.css"/>
+<link rel="stylesheet" href="${basePath}_1/lib/zui/lib/datetimepicker/datetimepicker.min.css"/>
+<link rel="stylesheet" href="${basePath}_1/lib/zui/lib/treemap/zui.treemap.min.css"/>
+<link rel="stylesheet" href="${basePath}_1/css/custom.css"/>
+<link rel="stylesheet" href="${basePath}_1/css/iconfont.css"/>
+<link rel="stylesheet" href="${basePath}_1/css/loading.css"/>
+<link rel="stylesheet" href="${basePath}_1/lib/zui/lib/uploader/zui.uploader.min.css">
+<link rel="stylesheet" href="${basePath}_1/css/list.css"/>

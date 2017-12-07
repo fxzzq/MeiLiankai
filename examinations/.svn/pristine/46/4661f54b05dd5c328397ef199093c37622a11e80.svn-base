@@ -1,0 +1,615 @@
+package com.minlength.proj.examinations.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.zefer.html.doc.r;
+
+import com.minlength.platform.core.processor.Processor;
+import com.minlength.platform.core.processor.sys.JdbcProcessor;
+import com.minlength.platform.core.processor.sys.vo.JdbcUpdateResult;
+import com.minlength.platform.core.processor.sys.vo.QueryResult;
+import com.minlength.platform.core.security.context.SecurityContext;
+import com.minlength.platform.core.utils.JSONUtil;
+import com.minlength.platform.core.utils.TimeUtil;
+import com.minlength.platform.core.web.processor.SouthInterfaceProcessor;
+import com.minlength.platform.core.web.processor.WebSystemProcessor;
+import com.minlength.proj.examinations.vo.Configuration;
+import com.minlength.proj.examinations.vo.Result;
+import com.thoughtworks.xstream.mapper.Mapper.Null;
+
+/**
+ * @author zhangz
+ *
+ */
+@Service
+@Scope(value="singleton")
+public class ExaminationService {
+	
+	@Resource
+	private Processor processor;
+	
+	@Resource
+	private Configuration configuration;
+	
+	private boolean debugMode = true;
+	
+    public String getMyQuestionsList(Map<String, Object> input){
+    	Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "admin";
+    	if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	String type = input.get("keyword")==null?"":input.get("keyword").toString();
+    	long start = 0;
+    	long limit = 25;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	String sql = "SELECT e.uuid,e.stem,e.content,e.analysis,e.answer,fn_tree_pathname(t.id,' ') type " + 
+    			"  FROM tb_proj_examinations_examqusetions e left join tb_proj_examinations_type t on t.id=e.type WHERE creator = ? LIMIT ?,? ";
+    	sql = "select uuid,stem,type FROM tb_proj_examinations_examqusetions WHERE creator = ? and"
+    			+ "(CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE `type` LIKE ? END) or (CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE `stem` LIKE ? END) LIMIT ?,?";
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, new Object[] {account,type,type,("%"+type+"%"),type,type,("%"+type+"%"),start,limit}).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+    }
+
+	public String getQuestionDetail(Map<String, Object> data) {
+		Result result = new Result();
+		Object uuid = data.get("uuid");
+		result.setSuccess(false);
+		if(uuid == null || "".equals(uuid.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "select uuid,stem,content,analysis,answer,type from tb_proj_examinations_examqusetions where uuid=?";
+		QueryResult queryResult = processor.routeTo(WebSystemProcessor.class).jdbcQuery(sql, new Object[] {uuid}).preValue(QueryResult.class);
+		result.setData(queryResult.getData());
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String delQuestion(Map<String, Object> input) {
+		Result result = new Result();
+		Object uuid = input.get("uuid");
+		String account = "admin";
+		if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		result.setSuccess(false);
+		if(uuid == null || "".equals(uuid.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "delete from tb_proj_examinations_examqusetions where uuid=? and creator=?";
+		JdbcUpdateResult updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction().
+		jdbcUpdate(sql, new Object[] {uuid,account}).commitJdbcTransaction()
+		.preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult);
+	}
+
+	public String getTypes(Map<String, Object> data) {
+		String account = "admin";
+		if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		String sql = "SELECT DISTINCT type as value,type as text from tb_proj_examinations_examqusetions where creator = ?";
+		QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, new Object[] {account}).preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+
+	public String getQuestionsByType(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "admin";
+    	if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	String type = input.get("type")==null?"":input.get("type").toString();
+    	String keyword = input.get("keyword")==null?"":input.get("keyword").toString();
+    	if(type == null || "".equals(type)) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+    	long start = 0;
+    	long limit = 15;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String sql = "select uuid,stem,type,wrongnum,total,case when wrongnum/total is  null then 0 else concat(convert((wrongnum/total)*100,DECIMAL),' %') end as rate from tb_proj_examinations_examqusetions where type=? and creator=?"
+				+ " and case when ? is null or ? ='' then 1=1 else `stem` like ? end ORDER BY rate desc limit ?,?";
+		QueryResult queryResult = processor.routeTo(JdbcProcessor.class).
+		jdbcQuery(sql, new Object[] {type,account,keyword,keyword,"%"+keyword+"%",start,limit}).preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+
+	public String delPaper(Map<String, Object> input) {
+		Result result = new Result();
+		Object uuid = input.get("uuid");
+		String account = "admin";
+		if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		result.setSuccess(false);
+		if(uuid == null || "".equals(uuid.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "delete from tb_proj_examinations_paper where uuid=? and creator=?";
+		JdbcUpdateResult updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction().
+		jdbcUpdate(sql, new Object[] {uuid,account}).commitJdbcTransaction()
+		.preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult);
+	}
+
+	public String addPaper(Map<String, Object> input) {
+		Result result = new Result();
+		result.setSuccess(false);
+		String account = "admin";
+		if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		Object uuidsobj = input.get("uuids[]");
+		Object type = input.get("type");
+		Object name = input.get("name");
+		if (uuidsobj == null || "".equals(uuidsobj.toString()) ||
+				type == null || "".equals(type.toString())||
+				name == null || "".equals(name.toString())
+				) {
+			result.setEmsg("参数传递错误!");
+			return JSONUtil.toJson(result);
+		}
+		String []uuids = null;
+		if (uuidsobj instanceof String[]) {
+			uuids = (String[]) uuidsobj;
+		}
+		else {
+			uuids = new String[] {uuidsobj.toString()};
+		}
+		StringBuilder sb = new StringBuilder("insert into tb_proj_examinations_paper(`uuid`,`name`,`type`,`creator`,`questions`) VALUES(UUID(),?,?,?," + 
+				"(select CONCAT('[',GROUP_CONCAT(CONCAT('{\"uuid\":\"',uuid,'\",\"type\":\"',type,'\",\"stem\":\"',stem,'\",\"content\":',content,',\"analysis\":\"',analysis,'\",\"answer\":\"',answer,'\"}')),']')  as content from tb_proj_examinations_examqusetions where uuid in(?");
+		Object []params = new Object[uuids.length+3];
+		params[0] = name;
+		params[1] = type;
+		params[2] = account;
+		params[3] = uuids[0];
+		for(int i=1;i<uuids.length;i++) {
+			sb.append(",?");
+			params[i+3] = uuids[i];
+		}
+		sb.append(")))");
+		JdbcUpdateResult updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction()
+		.jdbcUpdate(sb.toString(), params).commitJdbcTransaction().preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult);
+	}
+
+	public String getMyPaperList(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "admin";
+    	if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	Object istotalobj = input.get("istotal");
+    	String type = input.get("keyword")==null?"":input.get("keyword").toString();
+    	boolean istotal = false;
+    	if (istotalobj != null && !"".equals(istotalobj.toString())) {
+    		try {
+    			if (Boolean.parseBoolean(istotalobj.toString())) {
+    				istotal = true;
+    			}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+    	long start = 0;
+    	long limit = 25;
+    	String sql = "select uuid,name,type FROM tb_proj_examinations_paper WHERE creator = ?";
+    	Object[]param = new Object[] {account};
+    	if(!istotal) {
+    		sql = "select uuid,name,type FROM tb_proj_examinations_paper WHERE creator = ? and"
+        			+ "(CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE `type` LIKE ? END) or (CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE `name` LIKE ? END) LIMIT ?,?";
+    		try {
+    			start = Long.parseLong(startobj.toString());
+    			limit = Long.parseLong(limitobj.toString());
+    			param = new Object[] {account,type,type,("%"+type+"%"),type,type,("%"+type+"%"),start,limit};
+    		} catch (Exception e) {
+    			result.setEmsg("参数传递失败!");
+    			return JSONUtil.toJson(result);
+    		}
+    	}
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, param).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+	
+	public String getPaperDetail(Map<String, Object> input) {
+		Result result = new Result();
+		Object uuid = input.get("uuid");
+		result.setSuccess(false);
+		if(uuid == null || "".equals(uuid.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "select uuid,name,type,questions from tb_proj_examinations_paper where uuid=?";
+		QueryResult queryResult = processor.routeTo(WebSystemProcessor.class).jdbcQuery(sql, new Object[] {uuid}).preValue(QueryResult.class);
+		result.setData(queryResult.getData());
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String getMyClass(Map<String, Object> input) {
+		String account = "campus_3422611";
+		String webresource = null;
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+			webresource = processor.routeTo(SouthInterfaceProcessor.class).sendHttpGet(configuration.getClassListUrl()+"?taccount="+account).preValue(Object.class).toString();
+		}
+		else {
+			try {
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("/com/minlength/proj/examinations/service/classlist.json");
+				webresource = IOUtils.toString(is, "utf-8");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return JSONUtil.toJson(JSONUtil.parseJson2Map(webresource));
+	}
+
+	public String arrange(Map<String, Object> input) {
+		Result result = new Result();
+		Object uuid = input.get("paper_uuid");
+		Object name = input.get("name");
+		Object classid = input.get("classid");
+		Object type = input.get("type");
+		Object info = input.get("info") == null?"":input.get("info");
+		String account = "admin";
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		result.setSuccess(false);
+		if(uuid == null || "".equals(uuid.toString()) ||
+				name == null || "".equals(name.toString()) ||
+				classid == null || "".equals(classid.toString()) ||
+				type == null || "".equals(type.toString())
+				) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		long classidl = 0;
+		try {
+			classidl = Long.parseLong(classid.toString());
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			result.setEmsg("参数传递错误!");
+			return JSONUtil.toJson(result);
+		}
+		String webresource = null;
+		if (!debugMode) {
+			webresource = processor.routeTo(SouthInterfaceProcessor.class).sendHttpGet(configuration.getClassStudentsUrl()+"?taccount="+account).preValue(Object.class).toString();
+		}
+		else {
+			try {
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("/com/minlength/proj/examinations/service/studentlist.json");
+				webresource = IOUtils.toString(is, "utf-8");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		Map<String, Object> stus = JSONUtil.parseJson2Map(webresource);
+		if (!(Boolean) stus.get("success")) {
+			return webresource;
+		}
+		List<Map<String, Object>> stulist = (List<Map<String, Object>>) stus.get("data");
+		if (stulist.size() == 0) {
+			result.setEmsg("您还没有学生，不能布置作业!");
+			return JSONUtil.toJson(result);
+		}
+		
+		Date now = new Date();
+		Date after = new Date(now.getTime() + configuration.getDeadline());
+		String ctime = TimeUtil.dateToString(now, TimeUtil.DATETIME_PATTERN)
+		,stime = TimeUtil.dateToString(now, TimeUtil.DATETIME_PATTERN);
+		String etime = TimeUtil.dateToString(after, TimeUtil.DATETIME_PATTERN);
+		String sdate = TimeUtil.dateToString(now);
+		String sql = "insert into TB_PROJ_EXAMINATIONS_ASSIGNMENT(`creator`,`name`,`type`,`ctime`,`stime`,`etime`,`sdate`,`paper`,`info`) "
+				+ "values(?,?,?,?,?,?,?,(select questions from tb_proj_examinations_paper where uuid = ?),?)";
+		JdbcUpdateResult updateResult = null;
+		try {
+			updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction().
+			jdbcUpdate(sql, new Object[] {account,name,type,ctime,stime,etime,sdate,uuid,info}).preValue(JdbcUpdateResult.class);
+		} catch (Exception e) {
+			if (e.getMessage().contains("cannot be null")) {
+				result.setEmsg("试题不能为空，请返回重新添加!");
+			}
+			else {
+				result.setEmsg("数据库修改失败，请稍后重试!");
+			}
+			e.printStackTrace();
+			return JSONUtil.toJson(result);
+		}
+		long assingid = updateResult.getGeneratedKeys()[0];
+		String sql2 = "insert into TB_PROJ_EXAMINATIONS_ASSIGNDETAIL(`assingid`,`account`,`name`,`classid`) values(?,?,?,?)";
+		List<Object[]> params = new ArrayList<Object[]>();
+		for (Map<String, Object> map : stulist) {
+			Object saccount = map.get("account");
+			Object sname = map.get("name");
+			Object[]param = new Object[] {assingid,saccount,sname,classid};
+			params.add(param);
+		}
+		JdbcUpdateResult updateResult2 = processor.routeTo(JdbcProcessor.class).jdbcUpdate(sql2, params).commitJdbcTransaction().preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult2);
+	}
+
+	public String getArrangeList(Map<String, Object> input) {
+		String account = "admin";
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	long start = 0;
+    	long limit = 25;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setEmsg("获取参数失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "select id,name,type,ctime from TB_PROJ_EXAMINATIONS_ASSIGNMENT where creator = ? and isdel=0 order by ctime desc limit ?,?";
+		QueryResult queryResult = processor.routeTo(WebSystemProcessor.class).jdbcQuery(sql, new Object[] {account,start,limit}).end().preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+
+	public String getTerms(Map<String, Object> data) {
+		String webresource = null;
+		if (!debugMode) {
+			webresource = processor.routeTo(SouthInterfaceProcessor.class).sendHttpGet(configuration.getTermsUrl()).preValue(Object.class).toString();
+		}
+		else {
+			try {
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("/com/minlength/proj/examinations/service/termlist.json");
+				webresource = IOUtils.toString(is, "utf-8");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return webresource;
+	}
+
+	public String getTermStatistics(Map<String, Object> input) {
+		String account = "admin";
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	Object classid = input.get("classid");
+    	Object sdate = input.get("sdate");
+    	Object edate = input.get("edate");
+    	if(classid == null || "".equals(classid) ||
+    			sdate == null || "".equals(sdate) ||
+    			edate == null || "".equals(edate)
+    			) {
+    		result.setEmsg("参数传递错误!");
+    		return JSONUtil.toJson(result);
+    	}
+    	String sql = "SELECT A1.id,D.account,D.name, concat(A1.sdate,'') as date,SUM(D.total) as total,SUM(D.wrongnum) as wrongnum,SUM(D.rightnum) as rightnum FROM `tb_proj_examinations_assignment` A1 " + 
+    			"left join tb_proj_examinations_assigndetail D on d.assingid = A1.id " + 
+    			"where A1.creator = ? and D.classid=? AND A1.sdate BETWEEN ? AND ? " + 
+    			"GROUP BY D.account,A1.sdate " + 
+    			"ORDER BY A1.sdate";
+    	QueryResult queryResult = processor.routeTo(WebSystemProcessor.class).jdbcQuery(sql, new Object[] {account,classid,sdate,edate}).end().preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+
+	public String delArrange(Map<String, Object> input) {
+		Result result = new Result();
+		Object id = input.get("id");
+		String account = "admin";
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		result.setSuccess(false);
+		if(id == null || "".equals(id.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "update tb_proj_examinations_assignment set isdel = 1 where id=? and creator=?";
+		JdbcUpdateResult updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction().
+		jdbcUpdate(sql, new Object[] {id,account}).commitJdbcTransaction()
+		.preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult);
+	}
+
+	public String getPaperStatistics(Map<String, Object> input) {
+		Result result = new Result();
+		Object id = input.get("id");
+		String account = "admin";
+		if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		result.setSuccess(false);
+		if(id == null || "".equals(id.toString())) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+		String sql = "SELECT D.account,D.`name`,D.answer,D.total,D.wrongnum,D.rightnum FROM tb_proj_examinations_assigndetail D " + 
+				"where D.assingid = ?" + 
+				"ORDER BY rightnum desc";
+		QueryResult queryResult = processor.routeTo(WebSystemProcessor.class).jdbcQuery(sql, new Object[] {id}).end().preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+
+	public String practiceList(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "XS00001";
+    	if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	String type = input.get("keyword")==null?"":input.get("keyword").toString();
+    	long start = 0;
+    	long limit = 25;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+    	String sql = "select A.id,A.name,A.type,case when D.answer is null then true else false end as isfinish FROM tb_proj_examinations_assignment A LEFT JOIN tb_proj_examinations_assigndetail D ON A.ID=D.assingid "
+    			+ "WHERE A.type='随堂练习' and D.ACCOUNT=? AND (CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE A.`name` LIKE ? END) LIMIT ?,?";
+    	Object[]param = new Object[] {account,type,type,("%"+type+"%"),start,limit};
+    		
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, param).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String workList(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "XS00001";
+    	if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	String type = input.get("keyword")==null?"":input.get("keyword").toString();
+    	long start = 0;
+    	long limit = 25;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+    	String sql = "select A.id,A.name,A.type,case when D.answer is null then true else false end as isfinish FROM tb_proj_examinations_assignment A LEFT JOIN tb_proj_examinations_assigndetail D ON A.ID=D.assingid "
+    			+ "WHERE A.type='课后作业' and D.ACCOUNT=? and (CASE WHEN (''=? OR ? IS NULL) THEN 1=1 ELSE A.`name` LIKE ? END) LIMIT ?,?";
+    	Object[]param = new Object[] {account,type,type,("%"+type+"%"),start,limit};
+    		
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, param).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String mistakeList(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "XS00001";
+    	if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object startobj = input.get("start");
+    	Object limitobj = input.get("limit");
+    	long start = 0;
+    	long limit = 25;
+    	try {
+			start = Long.parseLong(startobj.toString());
+			limit = Long.parseLong(limitobj.toString());
+		} catch (Exception e) {
+			result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+		}
+    	String sql = "SELECT uuid,type,stem,lastanswer FROM `TB_PROJ_EXAMINATIONS_MISTAKES` where account = ? ORDER BY lasttime desc LIMIT ?,?";
+    	Object[]param = new Object[] {account,start,limit};
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, param).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String delMistake(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "XS00001";
+    	if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object uuid = input.get("uuid");
+    	if(uuid == null || "".equals(uuid.toString())) {
+    		result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+    	}
+    	String sql = "delete from `TB_PROJ_EXAMINATIONS_MISTAKES` where account = ? and uuid = ?";
+    	Object[]param = new Object[] {account,uuid};
+    	JdbcUpdateResult updateResult = processor.routeTo(JdbcProcessor.class).beginJdbcTransaction().jdbcUpdate(sql, param).commitJdbcTransaction().preValue(JdbcUpdateResult.class);
+		return JSONUtil.toJson(updateResult);
+	}
+
+	public String practiceDetail(Map<String, Object> input) {
+		Result result = new Result();
+    	result.setEmsg("查询成功");
+    	String account = "XS00001";
+    	if (!debugMode) {
+			account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+    	Object id = input.get("id");
+    	if(id == null || "".equals(id.toString())) {
+    		result.setEmsg("参数传递失败!");
+			return JSONUtil.toJson(result);
+    	}
+    	String sql = "select paper from tb_proj_examinations_assignment A left join " + 
+    			"tb_proj_examinations_assigndetail D on A.id = D.assingid " + 
+    			"where D.account = ? and A.id = ?";
+    	Object[]param = new Object[] {account,id};
+    	QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, param).preValue(QueryResult.class);
+    	List<Map<String, Object>> data = queryResult.getData();
+    	result.setData(data);
+    	result.setSuccess(queryResult.isSuccess());
+		return JSONUtil.toJson(result);
+	}
+
+	public String getMistakeType(Map<String, Object> data) {
+		String account = "XS00001";
+		if (!debugMode) {
+    		account = SecurityContext.CURRENT_LOGIN_USER_ACCOUNT.get();
+		}
+		String sql = "SELECT DISTINCT type as name from TB_PROJ_EXAMINATIONS_MISTAKES where account = ?";
+		QueryResult queryResult = processor.routeTo(JdbcProcessor.class).jdbcQuery(sql, new Object[] {account}).preValue(QueryResult.class);
+		return JSONUtil.toJson(queryResult);
+	}
+}

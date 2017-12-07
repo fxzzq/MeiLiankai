@@ -1,0 +1,71 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	
+    
+    <!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	
+	<!-- 系统版本升级，数据库升级脚本执行功能支持 -->
+	<bean id="versionUpdateForDatabaseListener" class="com.minlength.platform.core.web.system.listener.VersionUpdateForDatabaseListener">		
+		<property name="datasource" ref="datasource"/>
+		
+		<!-- 是否开启数据库升级脚本执行支持,true:执行,false:不执行 -->
+		<property name="execute_update_sql" value="true"/>
+		
+		<!-- 查询当前数据库版本的sql语句 -->
+		<property name="this_version_sql" value="SELECT `name`,`value` FROM TB_PLF_SYSTEM_INFO WHERE `name`='dbversion_'"/>
+		
+		<!-- 数据库脚本升级版本路径集合,执行按照从上到下的顺序执行 -->
+		<property name="updates">
+			<list>
+				<!-- 系统从初始化状态0.0.0.0_alpha版本升级到1.0.0.x_alpha版本 -->
+				<bean class="com.minlength.platform.core.web.system.DatabaseUpdateEntry">
+					<property name="base" value="0.0.0.0_alpha"/>
+					<property name="version" value="1.0.0.0_alpha"/><!-- alpha-beta-release -->
+					<property name="classpath_files"><!-- 数据库升级脚本集合，升级脚本必须一样一条语句，并且所有的语句会在一个事务执行 -->
+						<set>
+							<value>/resource/platform/core/web/system/dbupdate/1.0.0.0_alpha.sql</value>
+						</set>
+					</property>
+				</bean>
+			
+				<!-- 从1.0.0.x_alpha版本升级到1.0.0.20170920_alpha版本 -->
+				<!-- 
+				<bean class="com.minlength.platform.core.web.system.DatabaseUpdateEntry">
+					<property name="base" value="1.0.0.0_alpha"/>
+					<property name="version" value="1.0.1.20170924_alpha"/>
+					<property name="classpath_files">
+						<set>
+							<value>/resource/platform/core/web/system/dbupdate/1.0.0.0_alpha_to_1.0.1.20170924_alpha.sql</value>
+						</set>
+					</property>
+				</bean>
+				 -->
+			</list>
+		</property>
+	</bean>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->	
+	
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+ 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+   
+</beans>

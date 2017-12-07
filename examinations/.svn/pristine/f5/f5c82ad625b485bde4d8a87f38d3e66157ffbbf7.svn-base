@@ -1,0 +1,81 @@
+.paperset{
+	text-align: center;
+	
+}
+
+#btn {
+	width: 300px;
+	height: 44px;
+	margin: 30px auto;
+	color: #FFFFFF;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+
+.mui-btn {
+	display: block;
+}
+#fanhui{
+	font-weight: normal;
+}
+#xzq {
+	font: "微软雅黑";
+	font-size: 15px;
+	color: #000000;
+	text-align: center;
+	font-weight: bold;
+	margin-top: 5px;
+	
+}
+
+.listfont{
+	color: #1F1F1F;
+	font-size: 15px;
+	font-weight: normal;
+}
+.listfont2 span{
+	margin-left: 30px;
+		color: #1F1F1F;
+	font-size: 14px;
+}
+
+
+.mui-table-view-cell:after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #c8c7cc
+}
+
+.mui-badge {
+	font-size: 15px;
+	line-height: 1;
+	display: inline-block;
+	padding: 3px 6px;
+	color: #333;
+	border-radius: 100px;
+	background-color: rgba(0, 0, 0, .15)
+}
+.mui-bar .mui-icon {
+	font-size: 17px;
+	position: relative;
+	z-index: 20;
+	padding-top: 16px;
+	padding-bottom: 10px
+}
+a {
+	text-decoration: none;
+	color: #2E9134
+}
+a:active {
+	color: #2E9134
+}
+.mui-title{
+	font-weight: bold;
+}

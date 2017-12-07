@@ -1,0 +1,13 @@
+<#-- ÊôÐÔ½ÚµãµÝ¹éºê -->
+<#macro bpTree node>
+<li>
+	<span>${node.name}</span>
+	<#if node.children?? && node.children?size gt 0>
+	<#list node.children as child>
+    <ul>
+    	<@bpTree node=child/>
+    </ul>
+    </#list>
+    </#if>
+</li>
+</#macro>

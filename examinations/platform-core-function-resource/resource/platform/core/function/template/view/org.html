@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>		
+		<#include "_import/import_css.html">
+		<style>
+		.modal.in .modal-dialog {
+			z-index:99999;
+			
+		}
+		</style>
+	</head>
+	<body>			
+		<div id="treemapExample1" style="margin-top:40px;"></div>
+		<div class="modal fade" id="myModal">
+  			<div class="modal-dialog" style="margin-bottom:0px;">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h4 class="modal-title">部门成员</h4>
+      				</div>
+      				<div class="modal-body" style="padding:0px;max-height:300px;margin-bottom:0px;overflow-y:scroll;">
+        				<table class="table datatable" id="lefttable">
+			  			<thead>
+			    			<tr>
+			      				<th>账号</th>
+			      				<th>姓名</th>			      							     
+			    			</tr>
+			  			</thead>
+			  			<tbody></tbody>
+						</table>
+      				</div>      					      		
+    			</div>
+  			</div>
+		</div>		
+	</body>
+	<script type="text/javascript">
+		var $basePath = '${basePath}';
+	</script>
+	<#include "_import/import_javascript.html">
+	<script type="text/javascript">
+	//加载
+	function loadorg(pid){
+		doAjax('dzzg.org.Org','if4query',{pid:pid,magicboy:'yes'},true,function(data){
+			if(data.success){
+				if(data == null || typeof(data) == "undefined"){return;}
+    			if(data.data == null || typeof(data.data) == "undefined"){return;}
+    			if(data.data.length == null || typeof(data.data.length) == "undefined"){return;} 
+    			//对后台加载过来的数据进行关联组装
+    			var _map = {};
+    			for(var i = 0; i < data.data.length; i++){
+    				_map[data.data[i].id] = data.data[i];
+    				data.data[i].title = data.data[i].name;
+    				data.data[i].text = data.data[i].name;
+    				data.data[i].leaf = true;
+    			}
+    			//再便利map进行数据关联
+    			for(var key in _map){
+    				var _one = _map[key];
+    				if(_one.id > 2){_one.collapsed=true;}
+    				if(_map[_one.pid] != null && typeof(_map[_one.pid]) != 'undefined'){
+    					if(_map[_one.pid].children == null || typeof(_map[_one.pid].children) == 'undefined'){
+    						var _children = new Array(); 
+    						_map[_one.pid].children = _children;
+    					}
+						_map[_one.pid].children[_map[_one.pid].children.length] = _one;
+						_map[_one.pid].leaf = false;
+    				}else{
+    					if(key == 1){continue;}
+    					if(_map[1].children == null || typeof(_map[1].children) == 'undefined'){
+    						var _children = new Array(); 
+    						_map[1].children = _children;
+    					}
+						_map[1].children[_map[1].children.length] = _one;
+						_map[1].leaf = false;
+    				}
+    			}
+    			
+    			data.data = _map[1];
+    			
+    			$('#treemapExample1').treemap({
+    				data : data.data
+    				//,clickNodeToFold:false
+    			});
+			}
+		});
+	}
+	
+	$(document).ready(function(){
+		$('#treemapExample1').on('onNodeClick', function(node,data) {			
+			//修改标题
+			$('.modal-title').text(data.name);
+    		doAjax('dzzg.security.User','if4orgmany',{magicboy:'yes',id:data.id},true,function(data){
+    		var rows = [];
+			for(var i = 0; i < data.data.length; i++){
+				var obj = {};
+				obj.data = [
+					data.data[i].account,
+					data.data[i].name
+				];				
+				rows[rows.length] = obj;
+			}
+			$('#lefttable').datatable('load', {
+				cols: [
+			    	{text: '账号', type: 'string'},
+			    	{text: '账号', type: 'string'}		    	
+			    ],
+				rows: rows
+			});	
+    		});
+		});	
+		loadorg(1);	
+		
+		$('#myModal').modal({
+			backdrop : false,
+			moveable:true,
+			position:400
+		});
+		$('#myModal').prepend($('#treemapExample1'));		
+		
+	});
+	</script>
+</html>

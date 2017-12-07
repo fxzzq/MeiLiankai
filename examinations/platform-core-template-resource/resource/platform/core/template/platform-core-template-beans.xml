@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	   	   
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	
+	
+
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->	
+	
+	<!-- 内部的模板操作接口 -->
+	<bean id="templateService" class="com.minlength.platform.core.template.service.impl.TemplateServiceImpl">
+		<!-- 类路径模板列表 -->
+		<property name="base_package_libs">
+			<set>
+				<!-- function功能的页面模板 -->
+				<value>/resource/platform/core/function/template/view</value>
+				<value>/resource/proj/examinations/template</value>			
+			</set>
+		</property>
+	</bean>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+	<!-- 
+	<bean id="templateService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">  
+        <property name="serviceUrl" value="rmi://localhost:1099/TemplateService" />  
+        <property name="serviceInterface" value="com.meloclan.component.unit.template.service.TemplateService" />  
+    </bean>
+ 	-->
+ 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+	<!-- 
+	<bean id="rmi_templateService" class="org.springframework.remoting.rmi.RmiServiceExporter">  
+        <property name="serviceName" value="TemplateService" />  
+        <property name="service" ref="templateService" />  
+        <property name="serviceInterface" value="com.meloclan.component.unit.template.service.TemplateService"/>  
+        <property name="registryPort" value="1099" />  
+    </bean>
+	 -->
+	
+</beans>

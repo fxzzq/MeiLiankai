@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.paper" table="TB_PROJ_EXAMINATIONS_PAPER">
+		<id name="uuid" type="string" column="uuid" length="256"></id>
+		<property name="name" type="string" column="name" length="256"/><!-- 名称 -->
+		<property name="type" type="string" column="[type]" length="256"/><!-- 类别id -->
+		<property name="creator" type="string" column="creator" length="16"/><!-- 创建人 -->
+		<property name="questions" type="text" column="questions" length="16777216"/><!-- 试题内容 -->
+	</class>
+	
+</hibernate-mapping>

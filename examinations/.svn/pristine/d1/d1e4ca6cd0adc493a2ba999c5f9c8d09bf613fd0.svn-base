@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>教师端</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="${basePath}_1/lib/mui/css/mui.min.css">
+		<link rel="stylesheet" href="${basePath}Teacher/css/TeacherEndmenu.css" />
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">随堂教育</h1>
+		</header>
+
+		<div class="mui-content">
+
+			<div id="tabbar" class="mui-control-content mui-active">
+
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 select1">
+					
+							<img src="${basePath}Teacher/img/examnation.png">
+							<div class="mui-media-body" >试题</div>
+						
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 select2" >
+						
+							<img src="${basePath}Teacher/img/test.png">
+							<div class="mui-media-body">试卷</div>
+						
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 select3">
+					
+							<img src="${basePath}Teacher/img/task.png">
+							<div class="mui-media-body">作业</div>
+					
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 select4">
+						
+							<img src="${basePath}Teacher/img/count.png">
+							<div class="mui-media-body">统计</div>
+					
+					</li>
+					<!--  <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+		                    <span class="mui-icon mui-icon-search"></span>
+		                    <div class="mui-media-body">Search</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+		                    <span class="mui-icon mui-icon-phone"></span>
+		                    <div class="mui-media-body">Phone</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+		                    <span class="mui-icon mui-icon-gear"></span>
+		                    <div class="mui-media-body">Setting</div></a></li>
+		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+		                    <span class="mui-icon mui-icon-info"></span>
+		                    <div class="mui-media-body">about</div></a></li>
+		           <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+		                    <span class="mui-icon mui-icon-more"></span>
+		                    <div class="mui-media-body">more</div></a></li>-->
+				</ul>
+
+			</div>
+			</div>
+	</body>
+	<script src="${basePath}_1/lib/mui/js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+       mui('.mui-table-view').on('tap','.select1',function(){
+         mui.openWindow({
+         	url:'${basePath}Teacher/ExamMange_main.html'
+         });
+       });
+             mui('.mui-table-view').on('tap','.select2',function(){
+         mui.openWindow({
+         	url:'${basePath}Teacher/PaperManager_main.html'
+         });
+       });
+             mui('.mui-table-view').on('tap','.select3',function(){
+         mui.openWindow({
+         	url:'${basePath}Teacher/Task_main.html'
+         });
+       });
+             mui('.mui-table-view').on('tap','.select4',function(){
+         mui.openWindow({
+         	url:'${basePath}Teacher/TermCount.html'
+         });
+       });
+	
+	</script>
+
+</html>

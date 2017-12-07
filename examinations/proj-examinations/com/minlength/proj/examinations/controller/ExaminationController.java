@@ -1,0 +1,276 @@
+package com.minlength.proj.examinations.controller;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.minlength.platform.core.processor.Processor;
+import com.minlength.platform.core.web.processor.WebSystemProcessor;
+import com.minlength.proj.examinations.service.ExaminationService;
+
+/**
+ * 用于生成页面的控制器
+ * @author zhangzh
+ *
+ */
+
+@Controller
+@RequestMapping("/proj/examinations")
+public class ExaminationController {
+	
+	@Resource
+	private Processor processor;
+	@Resource
+	private ExaminationService examinationService;
+	/**
+	 * 获取我的试题列表
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getmyquestionslist.action",produces="text/html;charset=UTF-8")
+    public String getMyQuestionsList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMyQuestionsList(data);
+    }
+	
+	/**
+	 * 获取试题详情
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getquestiondetail.action",produces="text/html;charset=UTF-8")
+    public String getQuestionDetail(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getQuestionDetail(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getmypaperlist.action",produces="text/html;charset=UTF-8")
+    public String getMyPaperList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMyPaperList(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getpaperdetail.action",produces="text/html;charset=UTF-8")
+    public String getPaperDetail(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getPaperDetail(data);
+    }
+	
+	/**
+	 * 删除试题
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delquestion.action",produces="text/html;charset=UTF-8")
+    public String delQuestion(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.delQuestion(data);
+    }
+	
+	/**
+	 * 获取我的试题类型
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/gettypes.action",produces="text/html;charset=UTF-8")
+    public String getTypes(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getTypes(data);
+    }
+	
+	/**
+	 * 根据试题类型获取试题列表
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getquestionsbytype.action",produces="text/html;charset=UTF-8")
+    public String getQuestionsByType(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getQuestionsByType(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/delpaper.action",produces="text/html;charset=UTF-8")
+    public String delPaper(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.delPaper(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/addpaper.action",produces="text/html;charset=UTF-8")
+    public String addPaper(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.addPaper(data);
+    }
+
+	@ResponseBody
+	@RequestMapping(value = "/getmyclass.action",produces="text/html;charset=UTF-8")
+    public String getMyClass(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMyClass(data);
+    }
+	
+	/**
+	 * 安排考试或作业
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/arrange.action",produces="text/html;charset=UTF-8")
+    public String arrange(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.arrange(data);
+    }
+	
+	/**
+	 * 获取考试列表
+	 * @param request
+	 * @param response
+	 * @param contentType
+	 * @return
+	 * @throws IOException
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getarrangelist.action",produces="text/html;charset=UTF-8")
+    public String getArrangeList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getArrangeList(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/delarrange.action",produces="text/html;charset=UTF-8")
+    public String delArrange(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.delArrange(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getterms.action",produces="text/html;charset=UTF-8")
+    public String getTerms(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getTerms(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/gettermstatistics.action",produces="text/html;charset=UTF-8")
+    public String getTermStatistics(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getTermStatistics(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getpaperstatistics.action",produces="text/html;charset=UTF-8")
+    public String getPaperStatistics(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getPaperStatistics(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/practicelist.action",produces="text/html;charset=UTF-8")
+    public String practiceList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.practiceList(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/practicedetail.action",produces="text/html;charset=UTF-8")
+    public String practiceDetail(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.practiceDetail(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/dopractice.action",produces="text/html;charset=UTF-8")
+    public String doPractice(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.doPractice(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/finishpractice.action",produces="text/html;charset=UTF-8")
+    public String finishPractice(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.finishPractice(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/worklist.action",produces="text/html;charset=UTF-8")
+    public String workList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.workList(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getmistaketype.action",produces="text/html;charset=UTF-8")
+    public String getMistakeType(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMistakeType(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getmistakes.action",produces="text/html;charset=UTF-8")
+    public String getMistakes(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMistakes(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/mistakelist.action",produces="text/html;charset=UTF-8")
+    public String mistakeList(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.mistakeList(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/delmistake.action",produces="text/html;charset=UTF-8")
+    public String delMistake(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.delMistake(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/getmistakedetail.action",produces="text/html;charset=UTF-8")
+    public String getMistakeDetail(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.getMistakeDetail(data);
+    }
+	
+	@ResponseBody
+	@RequestMapping(value = "/asyncmistakes.action",produces="text/html;charset=UTF-8")
+    public String asyncMistakes(HttpServletRequest request, HttpServletResponse response,String contentType) throws IOException{			
+		Map<String, Object> data = processor.start(null).routeTo(WebSystemProcessor.class).acceptParameter(request).preValue(Map.class);
+		return examinationService.asyncMistakes(data);
+    }
+}

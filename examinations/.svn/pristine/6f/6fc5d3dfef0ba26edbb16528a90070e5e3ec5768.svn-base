@@ -1,0 +1,80 @@
+.paperset{
+	text-align: center;
+	
+}
+.countResult p{
+	text-align: center;
+	font-size: 16px;
+	color: #000000;
+}
+.success{
+    color: #4CD964;
+}
+.error{
+	color: red;
+}
+#fanhui{
+	font-weight: normal;
+}
+
+.listfont span{
+	color: #1F1F1F;
+	font-size: 15px;
+	font-weight: normal;
+}
+.listfont2 label{
+		color: #717171;
+	font-size: 14px;
+}
+#title{
+	font: "微软雅黑";
+	font-size: 15px;
+	color:#000000;
+	text-align: center;
+	font-weight: bold;
+	margin-top: 5px;
+}
+.mui-table-view-cell:after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #c8c7cc
+}
+.mui-bar .mui-icon {
+	font-size: 17px;
+	position: relative;
+	z-index: 20;
+	padding-top: 16px;
+	padding-bottom: 10px
+}
+a {
+	text-decoration: none;
+	color: #2E9134
+}
+a:active {
+	color: #2E9134
+}
+.mui-checkbox input[type=checkbox]:checked:before,
+.mui-radio input[type=radio]:checked:before {
+	color: #4CD964
+}
+.mui-checkbox input[type=checkbox]:before,
+.mui-radio input[type=radio]:before {
+	font-family: Muiicons;
+	font-size: 22px;
+	font-weight: normal;
+	line-height: 1;
+	text-decoration: none;
+	color: #aaa;
+	border-radius: 0;
+	background: 0 0;
+	-webkit-font-smoothing: antialiased
+}
+.mui-title{
+	font-weight: bold;
+}

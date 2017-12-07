@@ -1,0 +1,47 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	
+    
+    <!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	<bean id="teacherInterface" class="com.minlength.platform.component.weixin.service.impl.EnterpriseWeixinInterfaceServiceImpl">
+		<property name="processor" ref="webProcessor"/>
+		<property name="corpid" value="ww01e6174b304c262c"/><!-- 企业微信号的corpid -->
+		<property name="corpsecret" value="dABHIKpr0JhW7IEL1zpk_Smp80VFVwOzoFDHw87ni5g"/><!-- 企业应用的secret，每个应用不一样 -->
+		<property name="access_token_suffix" value="ACCESS_TOKEN_USER_SYCH"/><!-- access_token存放到redis中的前缀 -->
+		<property name="redis_database" value="1"/><!-- access_token存放到redis的数据库未知 -->
+	</bean>
+	
+	<bean id="studentInterface" class="com.minlength.platform.component.weixin.service.impl.EnterpriseWeixinInterfaceServiceImpl">
+		<property name="processor" ref="webProcessor"/>
+		<property name="corpid" value="ww01e6174b304c262c"/><!-- 企业微信号的corpid -->
+		<property name="corpsecret" value="oNPWcy0ptY20eLogc8mx5ttS1WjDipwyb-oeokSkfSc"/><!-- 企业应用的secret，每个应用不一样 -->
+		<property name="access_token_suffix" value="ACCESS_TOKEN_USER_SYCH"/><!-- access_token存放到redis中的前缀 -->
+		<property name="redis_database" value="1"/><!-- access_token存放到redis的数据库未知 -->
+	</bean>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->	
+	
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+ 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+	
+	
+</beans>

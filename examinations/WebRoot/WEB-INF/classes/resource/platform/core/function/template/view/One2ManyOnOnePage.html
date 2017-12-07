@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>一个界面操作一对多分配</title>
+<#include "_import/import_css.html">
+</head>
+<body>
+	<div class="container" style="min-width:900px;">
+		<!--
+		<div class="col-md-4" style="padding-right:0px;">
+			<div class="panel">
+  				<div class="panel-heading">
+  					${_one_function.name}
+  				</div>
+  				<div class="panel-body" style="padding:0px;height:auto;">
+  					<table class="table datatable" id="onetable">
+			  			<thead>
+			    			<tr>
+			      				<#if _one_function?? && _one_function.form??>
+			      					<#list _one_function.form as prop>
+			      						<#if prop.show4table>
+			      							<th>${prop.name!}</th>
+			      						</#if>
+			      					</#list>
+			      				</#if>			      
+			    			</tr>
+			  			</thead>
+			  			<tbody></tbody>
+					</table>
+				</div>					
+  			</div>  	
+  			<div style="text-align:right;">					
+				<ul class="pager" id="left_pager">						
+					<li class="previous disabled"><a href="###">&lt; 上一页</a></li>
+					<li class="active"><a href="###">1</a></li>											
+					<li class="next"><a href="###" onclick="list_query()">下一页 &gt;</a></li>							
+				</ul>					
+			</div>		
+		</div>			
+ 		 -->
+		<div class="row" id="queryForm">
+			<!-- 查询表单 -->
+			<#list _many_function.form as prop>
+				<#if prop.queryable>
+					<#if prop.type == 'input'>
+						<div class="col-md-3">
+							<div class="input-group">  
+					        	<span class="input-group-addon">${prop.name}：</span>
+									<input id="${prop.id}" type="text" class="form-control" placeholder="${prop.name}"/>
+								</div>
+							</div>
+						<#elseif prop.type == 'select'>	
+							<div class="col-md-3">
+		    				<div class="input-group">  
+					        	<span class="input-group-addon">${prop.name}：</span>
+									<select class="form-control chosen-select" id="${prop.id}">	
+										<#if prop.datasource??>	
+		    								<#if prop.datasource.type != 'predefined'>
+										<option value="">${component_function_message_select_all!""}</option>	
+											</#if>
+										</#if>					    		
+		    					</select>
+								</div>
+						</div>
+		    		<#elseif prop.type == 'multiselect'>				    		
+		    			<div class="col-md-3">		 				
+		    				<div class="input-group">  
+					        	<span class="input-group-addon">${prop.name}：</span>
+									<select multiple="multiple" class="form-control chosen-select" id="${prop.id}">	
+										<#if prop.datasource??>	
+		    								<#if prop.datasource.type != 'predefined'>
+										<option value="">${component_function_message_select_all!""}</option>	
+											</#if>
+										</#if>				    		
+		    					</select>
+								</div>
+						</div>	 			
+		    		<#elseif prop.type == 'date'>
+		    			<div class="col-md-3">		 				
+		    				<div class="input-group">  
+					        	<span class="input-group-addon">${prop.name}：</span>
+									<input id="${prop.id}" readonly="readonly" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+								</div>
+						</div>
+		    		<#elseif prop.type == 'time'>
+		    		
+		    		<#elseif prop.type == 'datetime'>				    			 
+							<div class="col-md-3">		 				
+		    				<div class="input-group">  
+					        	<span class="input-group-addon">${prop.name}：</span>
+									<input readonly="readonly" id="${prop.id}" type="text" class="form-datetime form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+								</div>
+						</div>
+						</#if>							
+				</#if>						
+			</#list>					   
+		</div>
+		<div class="row">
+			<!-- 功能项 -->
+			<#list _many_function.operations as opt>
+				<#if opt.location == 'BATCH'>
+					<button type="button" class="btn btn-success" id="${opt.id}" onclick="_click_${opt.id}()">
+					<#if opt.iconCls?? && opt.iconCls!=''>
+												<#if opt.iconCls == 'btn-cx'>
+													<i class="iconfont icon-chaxun" style="margin-right:3px;font-size:12px"></i>
+												<#elseif  opt.iconCls == 'btn-czcx'>
+													<i class="iconfont icon-zhongzhi" style="margin-right:3px;font-size:12px"></i>
+												<#elseif  opt.iconCls == 'btn-add'>
+													<i class="iconfont icon-iconjia" style="margin-right:3px;font-size:12px"></i>
+												<#elseif  opt.iconCls == 'btn-delete'>
+													<i class="iconfont icon-jianhao" style="margin-right:3px;font-size:12px"></i>												
+												<#else>
+													<i class="${opt.iconCls}" style="margin-right:3px;font-size:12px"></i>
+												</#if>
+												${opt.name}
+											<#elseif  opt.id == 'import'>
+													<i class="iconfont icon-exceldaoru-" style="margin-right:3px;font-size:12px"></i>${opt.name}
+											<#elseif  opt.id == 'export'>
+												<i class="iconfont icon-exceldaochu-" style="margin-right:3px;font-size:12px"></i>${opt.name}
+											<#elseif  opt.id == 'yuluqubatch'>
+												<i class="iconfont icon-queren" style="margin-right:3px;font-size:12px"></i>${opt.name}
+											<#elseif  opt.id == 'luqubatch'>
+												<i class="iconfont icon-luqumingdan" style="margin-right:3px;font-size:12px"></i>${opt.name}	
+											<#elseif  opt.id == 'tuixuebatch'>
+												<i class="iconfont icon-tuixue" style="margin-right:3px;font-size:12px"></i>${opt.name}	
+											<#elseif  opt.id == 'report' && id=='dzzg.szyx.xsgl.xsbdgl'>
+												<i class="iconfont icon-shoudongbaodao-" style="margin-right:3px;font-size:12px"></i>${opt.name}	
+											<#elseif  opt.id == 'lixiaobatch'>
+												<i class="iconfont icon-tuixue" style="margin-right:3px;font-size:12px"></i>${opt.name}
+											<#elseif  opt.id == 'setnewstudent'>
+												<i class="iconfont icon-xinshengbaodao" style="margin-right:3px;font-size:12px"></i>${opt.name}	
+											<#elseif  opt.id == 'setstunotnew'>
+												<i class="iconfont icon-shoudongbaodao-" style="margin-right:3px;font-size:12px"></i>${opt.name}
+											<#elseif  opt.id == 'open'>
+												<i class="iconfont icon-jiesuo" style="margin-right:3px;font-size:12px"></i>解锁
+											<#elseif  opt.id == 'close'>
+												<i class="iconfont icon-suoding" style="margin-right:3px;font-size:12px"></i>锁定
+											<#elseif  opt.id == 'heban'>
+												<i class="iconfont icon-merge" style="margin-right:3px;font-size:12px"></i>${opt.name}									
+											</#if>
+					
+					</button>
+				</#if> 
+
+			</#list>					
+		</div>
+		<div class="col-md-12" style="margin-top:10px;">
+			<table class="table datatable datatable1" id="manytable">
+	  			<thead>
+	    			<tr>
+	      				<#if _many_function?? && _many_function.form??>
+	      					<#list _many_function.form as prop>
+	      						<#if prop.show4table>
+	      							<th>${prop.name!}</th>
+	      						</#if>
+	      					</#list>
+	      					<#assign hasSingle="0">
+					        <#list  _many_function.operations as opt>
+							  <#if opt.location == 'SINGLE'>
+							  	<th style="width:120px;">操作</th>
+							  <#assign hasSingle="1">
+							  <#break>	
+							  </#if>
+						    </#list>		
+	      				</#if>			      
+	    			</tr>
+	  			</thead>
+	  			<tbody>			    		
+	  			</tbody>
+			</table>
+  			<div style="text-align:right;">					
+				<ul class="pager" id="right_pager">						
+					<li class="previous disabled"><a href="###">&lt; 上一页</a></li>
+					<li class="active"><a href="###">1</a></li>											
+					<li class="next"><a href="###" onclick="list_query()">下一页 &gt;</a></li>							
+				</ul>					
+			</div>			
+		</div>
+	</div>
+	<div class="modal fade" id="settingmodel">
+		<div class="modal-dialog modal-md">
+	    	<div class="modal-content">
+	    		<div class="modal-header">
+			  		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+			  		<h4 class="modal-title" id="titlename"></h4>
+		  		</div>
+		  		<div class="modal-body">
+		  			<div style="padding:20px;">
+						<form class="form-horizontal" id="editorForm">
+						  <#list _many_function.form as prop>
+						  	  <#if prop.show4modify>
+						  	  	<div class="form-group" id="${prop.id}_form_group">
+								    <label class="col-lg-3 col-md-3">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>:</label>
+								    <div class="col-lg-9 col-md-9">
+								      <#if prop.type == 'input'>
+								      	<#if prop.modifiable>
+									      <input maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    <#else>
+									      <input disabled maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    </#if>
+									   <#elseif prop.type == 'password'>
+								      	<#if prop.modifiable>
+									      <input maxlength="${prop.maxlength}" type="password" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    <#else>
+									      <input disabled maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    </#if>
+									  <#elseif prop.type == 'textarea'>
+								      	<#if prop.modifiable>
+									      <textarea maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"></textarea>	
+									    <#else>
+									      <textarea disabled maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"></textarea>	
+									    </#if>
+									  <#elseif prop.type == 'multiselect' || prop.type == 'select'>
+									     <select <#if prop.type == 'multiselect'> multiple="multiple" </#if> class="form-control chosen-select" id="${prop.id}">						     							     						    		
+								    	</select>
+								      <#elseif prop.type == 'date'>
+						  	  			<input readonly="readonly" id="${prop.id}" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">	
+								      <#else>
+								      <#if prop.modifiable>
+									      <input maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    <#else>
+									      <input disabled maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>	
+									    </#if>
+								      </#if>					      					      		     
+								    </div>
+								</div>
+							  <#else>
+							  	<input type="hidden" id="${prop.id}" name="${prop.name}"/>
+						  	  </#if>			  	  
+						  </#list>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+		  			<button type="button" class="btn btn-success" id="todo"><i class="iconfont icon-queren" style="margin-right:3px;font-size:12px;"></i>保存</button>
+		  		</div>
+			</div>
+		</div>
+	</div>	
+</body>
+<script type="text/javascript">
+var $basePath='${basePath}';
+</script>
+<#include "_import/import_javascript.html">
+<script type="text/javascript">
+var left_cstart = 0;
+var right_cstart = 0;
+
+function loadleft(_left_cstart){
+	if(typeof(_left_cstart) == 'undefined'){_left_cstart=left_cstart;}
+	var _params = {start: _left_cstart, limit : overall_limit_size,fid:'${_one_function.id}',opt:'if4query',page:1};
+	doAjaxFromUrl('${basePath}function/operation.action',_params,true,function(data){
+		if(data.success){
+			var rows = [];
+			for(var i = 0; i < data.data.length; i++){
+				var obj = {};
+				obj.data = [
+					data.data[i].id
+					<#if _one_function?? && _one_function.form??>
+			      		<#list _one_function.form as prop>
+			      		<#if prop.show4table>
+			      			,(typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':data.data[i].${prop.id}
+			      			</#if>
+			      		</#list>
+			      	</#if>
+				];
+				obj.checked = false;
+				rows[rows.length] = obj;
+			}
+			$('#onetable').datatable('load', {
+				cols: [
+			    	{text: '#', type: 'number', ignore : true}			    	
+			    	<#if _one_function?? && _one_function.form??>
+			      		<#list _one_function.form as prop>
+				      		<#if prop.show4table>
+				      			,{text: '${prop.name}', type:'string'}
+				      		<#else>
+				      			
+				      		</#if>
+			      		</#list>
+			      	</#if>				    				        				    			        
+			    ],
+				rows: rows
+			});	
+			
+			//更新分页数据
+			if(data != undefined && data != null && data.total != undefined){
+				var cpage = _params.start/_params.limit + 1;//当前页数
+				var totalpage = Math.ceil(data.total/_params.limit);//总页数
+				var pagerHtml = '';
+				if(_params.start == 0){
+					pagerHtml = '<li class="previous disabled"><a href="###">&lt; 上一页</a></li>';
+				}else{
+					pagerHtml = '<li class="previous"><a href="###" onclick="loadleft('+(_params.start-_params.limit)+')">&lt; 上一页</a></li>';
+				}
+				if(data.total <= _params.limit){//总数据量小于一页
+					pagerHtml = pagerHtml + '<li class="active"><a href="###">1</a></li>';
+				}else if(data.total > _params.limit && data.total <= _params.limit * 5){//如果在1~5页之间
+					var page = 1;
+					for(var i = 0; i < data.total; i++){
+						if(i % _params.limit == 0){
+							if(_params.start == i){
+								pagerHtml = pagerHtml + '<li class="active"><a href="###">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+i+')">'+(page++)+'</a></li>';
+							}
+						}
+					}
+				}else{//如果大于5,则从后往前显示5个
+					if(cpage <= 5){//当前页在第5页之前
+						var page = 1;
+						for(var i = 0; i < 5; i++){
+							if(cpage != (i + 1)){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadleft('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}
+						}
+					}else{//当前页在5页之后之后						
+						var startpage = cpage-5;
+						pagerHtml = pagerHtml + '<li>'+
+										'<div class="btn-group" style="float:left;">'+
+										  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+										  '</button>'+
+										  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = 1; i < startpage + 1; i++){
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+						for(var i = startpage+1; i <= cpage; i++){
+							if(i != cpage){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}
+						}						
+					}
+				}
+				if(data.total <= _params.limit){
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}else if(_params.start + _params.limit < data.total){							
+					if(cpage < totalpage && totalpage>5){
+						pagerHtml = pagerHtml + '<li>'+
+												'<div class="btn-group" style="float:left;">'+
+												  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+												  '</button>'+
+												  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = Math.max(cpage+1,6); i <= totalpage; i++){//循环剩余页数
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+					}
+					
+					pagerHtml = pagerHtml + '<li class="next"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###" onclick="loadleft('+(_params.start+_params.limit)+')">下一页 &gt;</a></li>';					
+				}else{
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}
+				//pagerHtml = pagerHtml + '<li><a style="border:none;margin-left:1px;">每页'+_params.limit+'条,共'+data.total+'条</a></li>';
+				$('#left_pager').html(pagerHtml);
+			}
+		}				
+	});
+}
+
+function loadright(_right_cstart){
+	if(typeof(_right_cstart) == 'undefined'){_right_cstart=right_cstart;}
+	var _qparams = getFormValues('queryForm');
+	finstid = _qparams.finstid;
+	var _params = {start: _right_cstart, limit : overall_limit_size,fid:'${_many_function.id}',opt:'if4query',finstid:finstid};
+	_params = $.extend(_qparams,_params);
+	doAjaxFromUrl('${basePath}function/operation.action',_params,true,function(data){
+		if(data.success){
+			right_cstart = _right_cstart;
+			var rows = [];
+			for(var i = 0; i < data.data.length; i++){
+				var obj = {};
+				obj.data = [data.data[i].id
+					<#if _many_function?? && _many_function.form??>
+			      		<#list _many_function.form as prop>
+				      		<#if prop.show4table>
+				      			,'<span data-toggle="tooltip" title="' + ((typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':(typeof(data.data[i].${prop.id+'show'})=='undefined'||data.data[i].${prop.id+'show'}==null)?data.data[i].${prop.id}:data.data[i].${prop.id+'show'})+ '" >'
+				      			+((typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':(typeof(data.data[i].${prop.id+'show'})=='undefined'||data.data[i].${prop.id+'show'}==null)?data.data[i].${prop.id}:data.data[i].${prop.id+'show'})+'</span>'
+				      		</#if>
+			      		</#list>
+			      	</#if>
+			      	<#if hasSingle == '1'>
+				      	,''
+				      	<#list _many_function.operations as opt>
+						  	<#if opt.location == 'SINGLE'>
+								+'<a data-toggle="tooltip" title="${opt.name}" href="###" class="text-danger" onclick="doSingle('+data.start+',\''+data.data[i].id+'\',\'${opt.id}\',this)"><i class="iconfont icon-xiugai1" style="margin-right:5px;color:#2e9134;float:left;"></i></a>'
+							</#if>
+						</#list>
+					</#if>
+				];
+				obj.checked = data.data[i].selected != undefined && data.data[i].selected != null ? eval(data.data[i].selected.toLowerCase()):null;
+				obj.rowdata = data.data[i];
+				rows[rows.length] = obj;
+			}
+			var _cols = [
+		    	{text: '#', type: 'number', ignore : true}
+		    	<#if _many_function?? && _many_function.form??>
+		      		<#list _many_function.form as prop>
+			      		<#if prop.show4table>
+			      			,{<#if prop_index == 1>width:330,</#if>text: '${prop.name}', type:'string'}
+			      		</#if>
+		      		</#list>
+		      		,{width:'120',text: '操作'<#if hasSingle == '0'>, ignore : true</#if>}
+		      	</#if>
+		    ];
+			$('#manytable').datatable('load', {
+				cols: _cols,
+				rows: rows
+			});	
+			
+			//更新分页数据
+			if(data != undefined && data != null && data.total != undefined){
+				var cpage = _params.start/_params.limit + 1;//当前页数
+				var totalpage = Math.ceil(data.total/_params.limit);//总页数
+				var pagerHtml = '';
+				if(_params.start == 0){
+					pagerHtml = '<li class="previous disabled"><a href="###">&lt; 上一页</a></li>';
+				}else{
+					pagerHtml = '<li class="previous"><a href="###" onclick="loadright('+(_params.start-_params.limit)+')">&lt; 上一页</a></li>';
+				}
+				if(data.total <= _params.limit){//总数据量小于一页
+					pagerHtml = pagerHtml + '<li class="active"><a href="###">1</a></li>';
+				}else if(data.total > _params.limit && data.total <= _params.limit * 5){//如果在1~5页之间
+					var page = 1;
+					for(var i = 0; i < data.total; i++){
+						if(i % _params.limit == 0){
+							if(_params.start == i){
+								pagerHtml = pagerHtml + '<li class="active"><a href="###">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+i+')">'+(page++)+'</a></li>';
+							}
+						}
+					}
+				}else{//如果大于5,则从后往前显示5个
+					if(cpage <= 5){//当前页在第5页之前
+						var page = 1;
+						for(var i = 0; i < 5; i++){
+							if(cpage != (i + 1)){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadright('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}
+						}
+					}else{//当前页在5页之后之后						
+						var startpage = cpage-5;
+						pagerHtml = pagerHtml + '<li>'+
+										'<div class="btn-group" style="float:left;">'+
+										  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+										  '</button>'+
+										  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = 1; i < startpage + 1; i++){
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+						for(var i = startpage+1; i <= cpage; i++){
+							if(i != cpage){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}
+						}						
+					}
+				}
+				if(data.total <= _params.limit){
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}else if(_params.start + _params.limit < data.total){							
+					if(cpage < totalpage && totalpage>5){
+						pagerHtml = pagerHtml + '<li>'+
+												'<div class="btn-group" style="float:left;">'+
+												  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+												  '</button>'+
+												  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = Math.max(cpage+1,6); i <= totalpage; i++){//循环剩余页数
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+					}
+					
+					pagerHtml = pagerHtml + '<li class="next"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###" onclick="loadright('+(_params.start+_params.limit)+')">下一页 &gt;</a></li>';					
+				}else{
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}
+				//pagerHtml = pagerHtml + '<li><a style="border:none;margin-left:1px;">每页'+_params.limit+'条,共'+data.total+'条</a></li>';
+				$('#right_pager').html(pagerHtml);
+			}			
+		} else {
+			if (data.info != undefined && data.info != null && data.info.length > 0) {
+				var emsg = "";
+				for (var i in data.info) {
+					emsg += data.info[i].emsg + '<br/>';
+				}
+				alertError(emsg);
+			} else {
+				alertError(data.emsg);
+			}
+			
+		}				
+	});
+}
+
+function getTableSelected(id){
+	var result = {ids:[]};
+	var table = $('#'+id).data('zui.datatable');
+	if(table.checks == undefined || table.checks == null || table.checks.checks.length == 0){
+		alertError('请选择需要操作的数据行!');
+		throw e;
+	}
+	if(table != undefined && table != null){
+		var rows = table.data.rows;
+		if(rows != null && rows.length > 0){
+			$.each(rows, function(i,n){
+				if(n.checked){
+					result.ids[result.ids.length] = n.data[0];
+				}
+			});
+		}
+	}
+	return result;
+}
+
+function add(addRowIndexs){
+	if (addRowIndexs == undefined || addRowIndexs == null || addRowIndexs.length == 0) {
+		return;
+	}
+	var param = {'fid':'${_many_function.id}','opt':'grid2add','finstid' :finstid};
+	
+	$.extend(param,getFormValues('queryForm'));
+    
+	var myDatatable = $('table.datatable1').data('zui.datatable');
+
+	// 获取行选中数据
+	var checksStatus = myDatatable.checks;
+	
+	var _items = myDatatable.data.rows.filter(function(item){
+		return addRowIndexs.indexOf(item.index) >= 0;
+	});
+	
+	var datas = [];
+	var index = 0;
+	for (var i in _items) {
+		datas[index++] = JSON.stringify(_items[i].rowdata);
+	}
+	param.batchDatas = datas;
+	
+	doAjaxFromUrl('${basePath}function/operation.action',param,true,function(data){
+		if(data.success){
+			alertSuccess('分配成功!');
+			loadright();
+		}else {
+			alertError('分配失败!');
+		}			
+	});
+	
+}
+
+function _remove(removeRowIndexs){
+	
+	if (removeRowIndexs == undefined || removeRowIndexs == null || removeRowIndexs.length == 0) {
+		return;
+	}
+	var param = {'fid':'${_many_function.id}','opt':'grid2delete','finstid' :finstid};
+	
+	$.extend(param,getFormValues('queryForm'));
+    
+	var myDatatable = $('table.datatable1').data('zui.datatable');
+
+	// 获取行选中数据
+	var checksStatus = myDatatable.checks;
+	
+	var _items = myDatatable.data.rows.filter(function(item){
+		return removeRowIndexs.indexOf(item.index) >= 0;
+	});
+	
+	var datas = [];
+	var index = 0;
+	for (var i in _items) {
+		datas[index++] = JSON.stringify(_items[i].rowdata);
+	}
+	param.batchDatas = datas;
+	
+	doAjaxFromUrl('${basePath}function/operation.action',param,true,function(data){
+		if(data.success){
+			alertSuccess('移除成功!');
+			loadright();
+		}else {
+			alertError('移除失败!');
+		}			
+	});
+}
+
+function initQueryForm() {
+	//初始化日期选择
+	<#list _many_function.form as prop>
+  	  <#if prop.queryable>
+  	  	<#if prop.type == 'date'>
+	  	  	$('#${prop.id}').datetimepicker({
+		  	  	language:  "zh-CN",
+		  	    weekStart: 1,
+		  	    todayBtn:  1,
+		  	    autoclose: 1,
+		  	    todayHighlight: 1,
+		  	    startView: 2,
+		  	    minView: 2,
+		  	    forceParse: 0,
+		  	    format: "yyyy-mm-dd"
+		  	});
+  	  	<#elseif prop.type == 'time'>
+	  	    $('#${prop.id}').datetimepicker({
+	  	      	language:  "zh-CN",
+		  	    weekStart: 1,
+		  	    todayBtn:  1,
+		  	    autoclose: 1,
+		  	    todayHighlight: 1,
+		  	    startView: 1,
+		  	    minView: 0,
+		  	    maxView: 1,
+		  	    forceParse: 0,
+		  	    format: 'hh:ii'
+		  	});
+  	  	<#elseif prop.type == 'datetime'>
+	  		//初始化日期选择框
+			$('#${prop.id}').datetimepicker({
+			    weekStart: 1,
+			    todayBtn:  1,
+			    autoclose: 1,
+			    todayHighlight: 1,
+			    startView: 2,
+			    forceParse: 0,
+			    showMeridian: 1,
+			    format: "yyyy-mm-dd hh:ii"
+			});
+			
+			//初始化下拉选项的值
+  	  	<#elseif prop.type == 'multiselect' || prop.type == 'select'>
+  	  		<#if prop.datasource??>	
+	     		<#if prop.datasource.type == 'predefined'>
+	     			try{
+	     				var _value_${prop.id}_msg = '${prop.datasource.value?replace('\'','"')}';
+	     				var _value_${prop.id} = JSON.parse(_value_${prop.id}_msg);
+	     				if(_value_${prop.id} != undefined && _value_${prop.id} != null && _value_${prop.id}.length!=undefined){	
+	     					var hashAllFlag = false;		     					
+	     					for(var i = 0; i < _value_${prop.id}.length; i++){
+	     						if(_value_${prop.id}[i].id==-1||_value_${prop.id}[i].id==''||_value_${prop.id}[i].id=='-1'){hashAllFlag=true;}
+	     						$('#${prop.id}').append('<option value='+_value_${prop.id}[i].id+'>'+_value_${prop.id}[i].name+'</option>');
+	     					}
+	     					if(!hashAllFlag){
+	     						$('#${prop.id}').prepend('<option value="" selected>全部</option>');
+	     					}
+	     				}
+	     				//检查默认选项
+	     				var _value_${prop.id}_default_msg = "${prop.datasource.defaultvalue}"; 
+	     				if(_value_${prop.id}_default_msg != undefined && _value_${prop.id}_default_msg != null && _value_${prop.id}_default_msg != ''){
+	     					var defaultArray = _value_${prop.id}_default_msg.split('#');
+	     					if(defaultArray.length == 1){
+	     						$('#${prop.id}').val(defaultArray[0]);
+	     					}else if(defaultArray.length == 2){
+	     						if(defaultArray[1] == 'int'){
+	     							var _value = parseInt(defaultArray[0]);
+	     							$('#${prop.id}').val(_value);
+	     						}
+	     					}
+	     				}
+	     			}catch(e){}
+	     		<#elseif prop.datasource.type == 'ajax'>
+     				var _value_${prop.id} = '${prop.datasource.value}';
+     				var _value_split_${prop.id} = _value_${prop.id}.split(':');
+     				doAjax(_value_split_${prop.id}[0],_value_split_${prop.id}[1],{},false,function(data){
+     					try{
+     						if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){
+     							var hashAllFlag = false;			     					
+	     						$.each(data.data, function(i,n){	
+	     							if(n.id==-1||n.id==''||n.id=='-1'){hashAllFlag=true;}	     							
+	     							$('#${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+	     						});
+	     						if(!hashAllFlag){
+	     							$('#${prop.id}').prepend('<option value="" selected>全部</option>');
+	     						}
+	     					}
+     					}catch(e){}finally{}		     					
+     				});			     				
+	     		</#if>					     								     		
+	     	</#if>
+  	  	</#if>
+  	  </#if>
+	</#list>
+}
+var finstid = null;
+var one_oldchecks = null;
+var many_oldchecks = null;
+$(document).ready(function(){	
+	initQueryForm();
+	
+	//初始化多选
+	$('#queryForm select.chosen-select').chosen({
+	    no_results_text: '',
+	    disable_search_threshold: 2,
+	    max_selected_options : 20,
+	    search_contains: true,
+	    allow_single_deselect : true
+	});			
+				
+	//为table添加resze时间，将表格移动到开头
+	$('.datatable').resize(function(){
+		var tables = $('.table-datatable');
+		for(var i = 0; i < tables.length; i++){					
+			$(tables[i]).css({left:'0px'});
+		}
+		$('.bar').css({left:'0px'});
+	});
+	
+
+	//回车查询事件
+	$('body').keydown(function(event){
+		var e = event || window.event || arguments.callee.caller.arguments[0];
+		if(e && e.keyCode==13){
+			$('#query').click();
+		}
+	});
+	
+	$('#query').click();
+	
+	//多方
+	$('table.datatable1').datatable({checkable: true,storage:false,fixedHeader:true,checkByClickRow:false,
+		afterLoad:function(event){
+			many_oldchecks = [];
+			if (this.data != undefined &&  this.data != null && this.data.rows != undefined && this.data.rows != null) {
+				for (var i in this.data.rows) {
+					if (this.data.rows[i].checked) {
+						many_oldchecks[many_oldchecks.length] = parseInt(i);
+					}
+				}
+			}
+		},
+		checksChanged:function(event) {
+			var new_checks = this.checks.checks;
+			
+			//新增的记录
+			var addRowIndexs = new_checks.filter(function (item) {
+			    return many_oldchecks.indexOf(item) < 0;
+			 })
+//			console.log("add:"+addRowIndexs)
+			
+			//移除的记录
+			var removeRowIndexs = many_oldchecks.filter(function (item) {
+			    return new_checks.indexOf(item) < 0;
+			 })
+//			console.log("remove:"+removeRowIndexs)
+			
+			add(addRowIndexs);
+			
+			_remove(removeRowIndexs);
+		}
+	});
+
+	/*一方
+	$('table.datatable').datatable({checkable: true,storage:false,
+		fixedHeader:true,
+		checksChanged:function(event) {
+			loadright();
+			
+			var new_checks = this.checks.checks;
+			var result = new_checks.filter(function (item) {
+			    return one_oldchecks.indexOf(item) < 0;
+			 })
+			console.log(result)
+			if(event.checks.checks.length == 0) {
+				
+			}
+			 console.log(event);
+			 console.log(event.checks)
+	       
+	        console.log(getTableSelected("manytable"))
+		    alert("选中")
+		    console.log(event.target)
+		    console.log(event.isTrigger)
+	    }
+	});
+	//加载一方数据
+	loadleft();
+	*/
+	
+	
+	$('#todo').on('click',function(){
+		doSubmit();
+	});	
+});
+
+//当前编辑行的数据
+var _rowdata = null;
+var _thisform = [
+	<#list _many_function.form as prop>
+		<#if prop_index == 0>
+		<#else>
+			,
+		</#if>
+		<#if prop.validates??>
+		{
+			id:"${prop.id}",
+			name:"${prop.name}",
+			validates : [
+				<#list prop.validates as validate>
+					<#if validate_index == 0>
+					<#else>
+						,
+					</#if>
+					{
+						type : "${validate.type}",
+						exp : "${validate.exp}",
+						emsg : "${validate.emsg}"
+					}
+				</#list>
+			]
+		}
+		</#if>
+	</#list>			
+];	
+
+//验证表单
+function validate(id){
+	if(id != undefined){
+		var validates = null;
+		$.each(_thisform,function(){
+			if(this.id == id){
+				validates = this.validates;
+			}
+		});
+		if(validates != null){
+			$.each(validates, function(index, validate){
+				if(this.type == 'reg'){//判断正则表达式
+					if(!regularMatch($('#editorForm #'+id).val(),this.exp)){
+						$('#'+id+'_form_group').removeClass('has-error');
+						$('#'+id+'_form_group').addClass('has-error');
+						$('#editorForm #'+id).nextAll('label').remove();
+						$('#editorForm #'+id).after('<label class="has-error" style="color:#ea644a">'+validate.emsg+'</label>');
+						return false;
+					}else{
+						$('#'+id+'_form_group').removeClass('has-error');
+						$('#editorForm #'+id).nextAll('label').remove();
+					}					
+				}
+				else if(this.type == 'ajax'){//后台验证
+					var expsplit = this.exp.split(':');
+					var _params = {};
+					_params.fid = expsplit[0];
+					_params.opt = expsplit[1];
+					_params[id+''] = $('#'+id).val();
+					var final_add_path = opt_ajax_action_url;
+					if(add_action_url != undefined && add_action_url != null && add_action_url != ''){
+						final_add_path = add_action_url;
+					}
+					doAjaxFromUrl(final_add_path,_params,false,function(data){
+						if(data.success){//验证失败
+							$('#'+id+'_form_group').removeClass('has-error');
+							$('#editorForm #'+id).nextAll('label').remove();
+							$('#editorForm #'+id+'_form_group').css('margin-bottom','0px');
+							return false;
+						}else{
+							$('#'+id+'_form_group').removeClass('has-error');
+							$('#'+id+'_form_group').addClass('has-error');
+							$('#editorForm #'+id).nextAll('label').remove();
+							$('#editorForm #'+id).after('<label class="has-error" style="color:#ea644a">'+validate.emsg+'</label>');
+							$('#'+id+'_form_group').css('margin-bottom','15px');
+						}
+					});
+				}
+				else if(this.type == 'script'){
+					if(!eval(this.exp)){
+						$('#'+id+'_form_group').removeClass('has-error');
+						$('#'+id+'_form_group').addClass('has-error');
+						$('#editorForm #'+id).nextAll('label').remove();
+						$('#editorForm #'+id).after('<label class="has-error" style="color:#ea644a">'+this.emsg+'</label>');
+						$('#'+id+'_form_group').css('margin-bottom','0px');
+						return false;
+					}else{
+						$('#'+id+'_form_group').removeClass('has-error');
+						$('#editorForm #'+id).nextAll('label').remove();
+						$('#'+id+'_form_group').css('margin-bottom','15px');
+					}		
+				}
+			});
+		}
+	}	
+}
+
+//提交表单
+function doSubmit(){
+	//获取error
+	if($('#editorForm .has-error') != undefined && $('#editorForm .has-error').length > 0){
+		return;
+	}
+	
+	var _params = {'fid':'${_many_function.id}','opt':'savegridforsingle'};
+	
+	$.extend(_params,_rowdata);
+	$.extend(_params,getFormValuesWithoutLimit('editorForm'));
+	$.extend(_params,getFormValues('queryForm'));
+
+	var final_modify_path = '${basePath}function/operation.action';
+	
+	doAjaxFromUrl(final_modify_path,_params,true,function(data){
+			if(data.success){
+				alertSuccess('操作成功!');
+				loadright();
+				$("button.close").click();
+				resetForm('editorForm');
+//				$('#settingmodel').modal('hide', 'fit');
+				//window.location.href = '${basePath}_1/function/message4success.do';
+			}else{
+				if (data.info != undefined && data.info != null && data.info.length > 0) {
+					var emsg = "";
+					for (var i in data.info) {
+						emsg += data.info[i].emsg + '<br/>';
+					}
+					alertError(emsg);
+				} else {
+					alertError(data.emsg);
+				}
+				//判断是否为参数验证
+				if(data.ecode == 'validate_999999'){
+					for(var i = 0; i < data.info.length; i++){
+						var one = data.info[i];
+						if(one.success){continue;}
+						$('#'+one.name+'_form_group').removeClass('has-error');
+						$('#'+one.name+'_form_group').addClass('has-error');
+						$('#editorForm #'+one.name).nextAll('label').remove();
+						$('#editorForm #'+one.name).after('<label class="has-error" style="color:#ea644a">'+one.emsg+'</label>');
+					}
+				}
+			}
+		},function(){alertError('操作失败!');});				
+}
+//当点击单行数据的还是进行的操作	
+function doSingle(start, rowid, opt, _this){
+	if (rowid == null || rowid == 'null') {
+		alertError('请选中后再进行操作！');
+		return;
+	}
+	//如果为下拉选择框,则需要初始化数据
+	<#list _many_function.form as prop>
+  	  <#if prop.show4modify>
+  	  	<#if prop.type == 'date'>
+	  	  	$('#editorForm #${prop.id}').datetimepicker({
+		  	  	language:  "zh-CN",
+		  	    weekStart: 1,
+		  	    todayBtn:  1,
+		  	    autoclose: 1,
+		  	    todayHighlight: 1,
+		  	    startView: 2,
+		  	    minView: 2,
+		  	    forceParse: 0,
+		  	    format: "yyyy-mm-dd"
+		  	}).on('changeDate',function(ev){
+		  		validate('${prop.id}');			
+			});					
+  	  	<#elseif prop.type == 'time'>
+	  	    $('#editorForm #${prop.id}').datetimepicker({
+	  	      	language:  "zh-CN",
+		  	    weekStart: 1,
+		  	    todayBtn:  1,
+		  	    autoclose: 1,
+		  	    todayHighlight: 1,
+		  	    startView: 1,
+		  	    minView: 0,
+		  	    maxView: 1,
+		  	    forceParse: 0,
+		  	    format: 'hh:ii'
+		  	}).on('changeDate',function(ev){
+		  		validate('${prop.id}');			
+			});					
+  	  	<#elseif prop.type == 'datetime'>
+	  		//初始化日期选择框
+			$('#editorForm #${prop.id}').datetimepicker({
+			    weekStart: 1,
+			    todayBtn:  1,
+			    autoclose: 1,
+			    todayHighlight: 1,
+			    startView: 2,
+			    forceParse: 0,
+			    showMeridian: 1,
+			    format: "yyyy-mm-dd hh:ii"
+			}).on('changeDate',function(ev){
+		  		validate('${prop.id}');			
+			});
+  	  	<#elseif prop.type == 'multiselect' || prop.type == 'select'>
+  	  		<#if prop.datasource??>	
+	     		<#if prop.datasource.type == 'predefined'>
+	     				var _value_${prop.id}_msg = '${prop.datasource.value?replace('\'','"')}';
+	     				var _value_${prop.id} = [];
+	     				try{
+	     					var _value_${prop.id} = JSON.parse(_value_${prop.id}_msg);
+	     				}catch(e){
+	     					var _value_${prop.id} = eval(_value_${prop.id}_msg);
+	     				}	
+     				if(_value_${prop.id} != undefined && _value_${prop.id} != null && _value_${prop.id}.length!=undefined){			     					
+	     				$('#editorForm #${prop.id}').append('<option value=""></option>');
+	     				for(var i = 0; i < _value_${prop.id}.length; i++){
+	     					$('#editorForm #${prop.id}').append('<option value='+_value_${prop.id}[i].id+' selected>'+_value_${prop.id}[i].name+'</option>');
+	     				}
+	     			}
+	     		<#elseif prop.datasource.type == 'ajax'>
+     				var _value_${prop.id} = '${prop.datasource.value}';
+     				var _value_split_${prop.id} = _value_${prop.id}.split(':');
+     				//首先页面数据库中获取信息
+     				var _value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data = null;
+     				if(hasLocalStorage('${(prop.datasource.value?replace('.','_'))?replace(':','_')}') && typeof(getLocalStorage()) != 'undefined' && getLocalStorage()!=null){//基础数据
+     					var dataMessage = '';
+     					try{
+     						dataMessage = getLocalStorage().getItem('${(prop.datasource.value?replace('.','_'))?replace(':','_')}');
+     					}catch(e){}
+     					if(dataMessage != '' && dataMessage != null){
+     						var data = JSON.parse(dataMessage);
+     						if(data.length > 0){
+     							_value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data = data;
+     							$('#editorForm #${prop.id}').append('<option value=""></option>');
+     							$.each(data, function(i,n){		     							
+	     							$('#editorForm #${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+	     						});
+     						}
+     					}
+     				}
+     				
+     				if(_value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data == null || _value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data.length == 0){
+     					doAjax(_value_split_${prop.id}[0],_value_split_${prop.id}[1],{limit:99999},false,function(data){
+     						try{
+     							if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){		     					
+	     							$('#editorForm #${prop.id}').append('<option value=""></option>');
+	     							$.each(data.data, function(i,n){		     							
+	     								$('#editorForm #${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+	     							});
+	     							if(hasLocalStorage('${(prop.datasource.value?replace('.','_'))?replace(':','_')}') && typeof(getLocalStorage()) != 'undefined' && getLocalStorage()!=null && data.data.length > 0){
+	     								getLocalStorage().setItem('${(prop.datasource.value?replace('.','_'))?replace(':','_')}', JSON.stringify(data.data));
+	     							}
+	     						}
+     						}catch(e){}finally{}		     					
+     					});
+     				}						     				
+	     		</#if>					     								     		
+	     	</#if>
+  	  	</#if>
+  	  </#if>
+	</#list>
+	
+	var myDatatable = $('table.datatable1').data('zui.datatable');
+
+	for (var i in myDatatable.data.rows) {
+		if (myDatatable.data.rows[i].rowdata.id == rowid) {
+			_rowdata = myDatatable.data.rows[i].rowdata;
+			break;
+		}
+	}
+	
+	//加载页面的已有数据	
+	var _params = {fid:'${_many_function.id}', opt: 'loadone', id:rowid};		
+	$.ajax({
+		type:"post",
+		url:'${basePath}function/operation.action',
+		async:true,
+		dataType : 'json',
+		data : _params,
+		success:function(data){
+			if(data.success){
+				<#list _many_function.form as prop>
+				var _prop = $('#editorForm #${prop.id}');
+				if(_prop != undefined && _prop != null){
+					try{ 
+						var val = '';
+						if(data.data[0]['${prop.id}']!=undefined && data.data[0]['${prop.id}']!=null){
+							val = data.data[0]['${prop.id}'];
+						} else if (_rowdata['${prop.id}']!=undefined && _rowdata['${prop.id}']!=null){
+							val = _rowdata['${prop.id}'];
+						}
+						_prop.val(val);
+						if (_prop[0].tagName == "SELECT") {
+							_prop.trigger('chosen:updated');
+						}
+						}catch(e){}
+				}
+				</#list>
+			}
+		}
+	});
+	
+	$("#titlename").text($(_this).attr('title'));
+	$('#settingmodel').modal({backdrop:'static',moveable:true,position:'fit'});
+	$('#settingmodel').on('shown.zui.modal', function() {
+		$('#editorForm select.chosen-select').chosen({
+		    no_results_text: '',
+		    disable_search_threshold: 2,
+		    max_selected_options : 20,
+		    search_contains: true,
+		    allow_single_deselect : true
+		});
+	});
+	
+	
+	
+	
+	
+/*	alert(rowid)
+	if(opt == undefined || opt == null || opt == ''){}			
+	<#list _many_function.operations as opt>
+		<#if opt.location == 'SINGLE' && opt.type == 'JAVASCRIPT'>
+			else if(opt == '${opt.id}'){
+				var defaultQueryParams = {};
+				${opt.value}
+			}				
+		</#if>
+	</#list>	
+	*/
+}			
+
+<#list _many_function.operations as opt>
+<#if opt.location == 'BATCH'>
+	function _click_${opt.id}(){
+		var defaultQueryParams = {};
+//		defaultQueryParams.finstid=finstid;					
+		if(typeof(params)!='undefined' && params != null){defaultQueryParams=$.extend(defaultQueryParams,params);}
+		<#if opt.id == 'query'>
+		clicktbheard=false;
+		_right_cstart = 0;
+		</#if>
+		<#if opt.type == 'JAVASCRIPT'>
+			loadright();
+		<#else>
+			forward('${opt.name}','${basePath}${opt.value}');
+		</#if>
+	}
+</#if>
+</#list>	
+</script>
+</html>

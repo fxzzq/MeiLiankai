@@ -1,0 +1,66 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	
+    
+    <!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	<context:component-scan base-package="com.minlength.proj.examinations" />
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+    <mvc:annotation-driven />
+    <mvc:resources location="/Student/" mapping="/Student/**"/>
+	<mvc:resources location="/Teacher/" mapping="/Teacher/**"/>
+	<mvc:resources location="/_1/" mapping="/_1/**"/>
+	<mvc:resources location="/proj/" mapping="/proj/**"/>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	<bean id="termService" class="com.minlength.proj.examinations.service.TermService">
+	    <!-- 学期查询间隔（毫秒） -->
+	    <property name="interval" value="86400000"></property>
+	</bean>
+	<bean id="configuration" class="com.minlength.proj.examinations.vo.Configuration">
+		<!-- 获取我的班级列表接口URL -->
+	    <property name="classListUrl" value="http://localhost:8080/ncwx/proj/getmyclasslist.action"></property>
+	    <!-- 根据班级id获取学生列表URL  -->
+	    <property name="classStudentsUrl" value="http://localhost:8080/ncwx/proj/getstulist.action"></property>
+	    <!-- 获取学期URL  -->
+	    <property name="termsUrl" value="http://localhost:8080/ncwx/proj/getterms.action"></property>
+	    
+	    <!-- zip模板路径  -->
+	    <property name="zipTemplate" value="resource/proj/examinations/template/zipTemplate.zip"></property>
+	    
+	    <!-- Excel模板路径  -->
+	    <property name="excelTemplate" value="resource/proj/examinations/template/excelTemplate.xlsx"></property>
+	    
+	    <!-- 布置作业完成期限（毫秒）默认30天 -->
+	    <property name="deadline" value="2592000000"></property>
+	</bean>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->	
+	<!-- <mvc:resources location="/_proj/" mapping="/_proj/**"/> -->
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+ 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置南向接口                                                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+	
+	
+</beans>

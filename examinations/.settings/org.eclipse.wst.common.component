@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="examinations">
+        <wb-resource deploy-path="/" source-path="/WebRoot"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-component-weixin-resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-web-resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-template"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-component-weixin"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-processor"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-template-resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-security"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-security-resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-web"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-utils"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-function-resource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/platform-core-function"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/proj-examinations"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/proj-examinations-resource"/>
+        <property name="context-root" value="/examinations"/>
+        <property name="java-output-path" value="/examinations/WebRoot/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>

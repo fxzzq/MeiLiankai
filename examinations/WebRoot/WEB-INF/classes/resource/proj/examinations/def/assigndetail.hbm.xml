@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.assigndetail" table="TB_PROJ_EXAMINATIONS_ASSIGNDETAIL">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="assingid" type="long" column="assingid"/><!-- 考试id -->
+		<property name="account" type="string" column="account" length="16"/><!-- 答题人 -->
+		<property name="name" type="string" column="name"  length="256"/><!-- 答题人姓名 -->
+		<property name="classid" type="long" column="classid" /><!-- 班级id -->
+		<property name="answer" type="text" column="answer" length="16777216"/><!-- 提交的答案 -->
+		<property name="total" type="long">
+			<column name="total" default="0"></column>
+		</property><!-- 题目总个数 -->
+		<property name="wrongnum" type="long">
+		    <column name="wrongnum" default="0"></column>
+		</property><!-- 答错题目数 -->
+		<property name="rightnum" type="long">
+		    <column name="rightnum" default="0"></column>
+		</property><!-- 答对题目数 -->
+	</class>
+	
+</hibernate-mapping>

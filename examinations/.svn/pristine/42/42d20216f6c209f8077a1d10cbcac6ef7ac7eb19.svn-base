@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.assignment" table="TB_PROJ_EXAMINATIONS_ASSIGNMENT">
+		<id name="id" type="long" column="id">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" column="name"  length="256"/><!-- 作业名称 -->
+		<property name="creator" type="string" column="creator" length="16"/><!-- 创建人 -->
+		<property name="type" type="string" column="type"  length="256"/><!-- 作业类型 -->
+		<property name="ctime" type="string" column="ctime"/><!-- 创建时间 -->
+		<property name="stime" type="string" column="stime"/><!-- 开始时间 -->
+		<property name="etime" type="string" column="etime"/><!-- 结束时间 -->
+		<property name="sdate" type="date" column="sdate"/><!-- 开始日期 -->
+		<property name="isdel" type="long"><!-- 开始日期 -->
+		    <column name="isdel" default="0"></column>
+		</property>
+		<property name="paper" type="text" column="paper" not-null="true" length="16777216"/><!-- 试卷内容 -->
+		<property name="info" type="string" column="info"  length="256"/><!-- 备注 -->
+	</class>
+	
+</hibernate-mapping>

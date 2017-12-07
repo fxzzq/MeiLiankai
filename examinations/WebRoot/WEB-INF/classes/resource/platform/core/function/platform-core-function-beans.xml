@@ -1,0 +1,87 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	
+    
+    <!-- ================================================================================ -->
+	<!-- ========                           模块内部配置                                                                     ======== -->
+	<!-- ================================================================================ -->
+	
+	<!-- 映入jar包中的配置文件 -->
+	<import resource="classpath*:resource/platform/core/function/impl/platform-core-function-impl-beans.xml"/>
+	<!-- ================================================================================ -->
+	<!-- ========                           系统SERVICE接口                                                            ======== -->
+	<!-- ================================================================================ -->		
+	
+	<!-- 内部的模板操作接口 -->
+	<bean id="functionManagerService" class="com.minlength.platform.core.function.service.impl.FunctionManagerServiceImpl" init-method="init">
+		<property name="templateService" ref="templateService"/>
+		<!-- 自动扫描的类路径配置文件 -->
+		<property name="scanClassPath">
+			<set>
+				<value>/resource/proj/examinations/def</value>
+			</set>
+		</property>
+
+		<!-- 直接引入定义文件 -->
+		<property name="resources">
+			<set>
+				<!-- <value>/resource/proj/examinations/def/eduadmin/taskallocation.xml</value> -->
+			</set>
+		</property>
+	</bean>
+	
+	<!-- hibernate配置文件读取修改 -->
+	<bean id="hibernateHbmHelper" class="com.minlength.platform.core.function.processor.impl.HibernateHbmHelper"/>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           宏定义配置                                                                          ======== -->
+	<!-- ================================================================================ -->
+	
+	<bean id="customMacroManager" class="com.minlength.platform.core.function.processor.impl.MacroManager">
+		<property name="macros">
+			<map>
+				
+				<!-- 系统的当前时间，年-月-日 -->
+				<entry key="$curdate">
+					<bean class="com.minlength.platform.core.function.processor.impl.macro.CurrentDateTimeMacro">
+						<property name="name" value="$curdate"/>
+						<property name="pattern" value="yyyy-MM-dd"/><!-- 时间格式化样式 -->
+					</bean>
+				</entry>
+				
+			</map>
+		</property>
+	</bean>
+	
+	<!-- ================================================================================ -->
+	<!-- ========                           系统RMI远程接口                                                             ======== -->
+	<!-- ================================================================================ -->
+	
+	<!-- 
+	<bean id="templateService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">  
+        <property name="serviceUrl" value="rmi://localhost:1099/TemplateService" />  
+        <property name="serviceInterface" value="com.meloclan.component.unit.template.service.TemplateService" />  
+    </bean>
+ 	-->
+ 	
+	<!-- ================================================================================ -->
+	<!-- ========                  配置RMI北向接口，对外开发                                                            ======== -->
+	<!-- ================================================================================ -->
+	<!-- 
+	<bean id="rmi_templateService" class="org.springframework.remoting.rmi.RmiServiceExporter">  
+        <property name="serviceName" value="TemplateService" />  
+        <property name="service" ref="templateService" />  
+        <property name="serviceInterface" value="com.meloclan.component.unit.template.service.TemplateService"/>  
+        <property name="registryPort" value="1099" />  
+    </bean>
+	 -->
+   
+</beans>

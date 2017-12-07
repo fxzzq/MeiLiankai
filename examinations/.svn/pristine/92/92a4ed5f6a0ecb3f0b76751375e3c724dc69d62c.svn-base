@@ -1,0 +1,125 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">	   	
+
+	<!-- ================================================================================ -->
+	<!-- ========                       对系统处理器的装配                                                                ======== -->
+	<!-- ========使用者可以在该配置中进行项目功能提供的增加和移除，包括自定义的功能     ======== -->
+	<!-- ================================================================================ -->
+	<mvc:resources location="/_1/" mapping="/_1/**"/>
+	
+	<!-- 加入MYSQL数据库支持 -->
+    <import resource="classpath*:resource/platform/core/web/processor/impl/platform-core-web-processor-impl-beans-database.xml"/>
+   	<!-- 加入Redis支持 -->
+   	<import resource="classpath*:resource/platform/core/web/processor/impl/platform-core-web-processor-impl-beans-redis.xml"/>	
+	<!-- 加入mongodb支持 -->
+	<!-- 
+   	<import resource="classpath*:resource/platform/core/web/processor/impl/platform-core-web-processor-impl-beans-mongodb.xml"/>
+   	 -->
+   	<!-- 加入web功能支持 -->
+   	<import resource="classpath*:resource/platform/core/web/processor/impl/platform-core-web-processor-impl-beans.xml"/>
+   	<!-- 系统默认提供功能支持：数据库升级脚本支持 -->
+   	<import resource="classpath*:resource/platform/core/web/system/platform-core-web-system-beans.xml"/>
+	
+   	<!-- 用于装配完整的系统处理器实例 -->
+	<bean id="webProcessor" class="com.minlength.platform.core.web.processor.impl.ProcessorFactory" factory-method="getWebProcessor">
+		<constructor-arg>
+			<map>
+				<entry key="com.minlength.platform.core.processor.sys.JdbcProcessor" value-ref="jdbcProcessor"/>
+				<entry key="com.minlength.platform.core.processor.sys.RedisProcessor" value-ref="redisProcessor"/>				
+				<!-- <entry key="com.minlength.platform.core.processor.sys.MongoProcessor" value-ref="mongoProcessor"/> -->
+				<entry key="com.minlength.platform.core.web.processor.WebRequestProcessor" value-ref="webTemplateProcessor"/>
+				<entry key="com.minlength.platform.core.web.processor.WebRequestProcessor" value-ref="webRequestProcessor"/>
+				<entry key="com.minlength.platform.core.web.processor.WebSystemProcessor" value-ref="webSystemProcessor"/>	
+				<entry key="com.minlength.platform.core.web.processor.SouthInterfaceProcessor" value-ref="southInterfaceProcessor"/>		
+				<entry key="com.minlength.platform.core.web.processor.NorthInterfaceProcessor" value-ref="northInterfaceProcessor"/>			
+			</map>
+		</constructor-arg>
+	</bean>	
+
+	<!-- ================================================================================ -->
+	<!-- ========                           HIBERNATE配置                                                                 ======== -->
+	<!-- ================================================================================ -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">  
+       <property name="dataSource" ref="datasource"></property>  
+       <property name="configLocation" value="classpath:resource/platform/core/web/processor/impl/hibernate/hibernate.cfg.xml"></property>
+       <property name="mappingLocations">  
+            <value>classpath:resource/**/proj/**/*.hbm.xml</value>
+       </property>
+   	</bean>    
+    
+    <!-- ================================================================================ -->
+	<!-- ========                           组件功能导入                                                                     ======== -->
+	<!-- ================================================================================ -->       
+    
+    <!-- 核心模块功能导入 -->
+    <import resource="classpath*:resource/platform/core/platform-core-web-beans.xml"/>
+    
+    <!-- 导入模板引擎模块 -->
+    <import resource="classpath*:resource/platform/core/template/platform-core-template-beans.xml"/>
+    
+    <!-- 导入function管理模块 -->
+    <import resource="classpath*:resource/platform/core/function/platform-core-function-beans.xml"/>
+    
+    <!-- 导入安全认证管理模块 -->
+    <import resource="classpath*:resource/platform/core/security/platform-core-security-beans.xml"/>
+    
+    <!-- 导入系统组件:企业微信接口模块 -->
+    <import resource="classpath*:resource/platform/component/weixin/platform-component-weixin-beans.xml"/>
+            
+    <!-- 导入项目定制代码 -->
+    <import resource="classpath*:resource/proj/examinations/proj-examinations-beans.xml"/>
+
+	<!-- ================================================================================ -->
+	<!-- ========                           WEB其他功能配置                                                             ======== -->
+	<!-- ================================================================================ -->	
+   	
+   	<!-- 配置I18N过滤器 -->
+   	<bean id="messageSource"  
+        class="com.minlength.platform.core.web.i18n.MultipleMessageSource"> 
+        <property name="cacheSeconds" value="5" /> 
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="basenames">  
+            <list>  
+                <value>classpath:resource/**/i18n/**/*message</value>  
+            </list>  
+        </property>  
+	</bean>
+	
+	<!-- i18n的filter对象 -->
+	<bean id="i18nFilter" class="com.minlength.platform.core.web.i18n.I18nFilter">
+		<property name="templateService" ref="templateService"/>
+		<property name="messageSource" ref="messageSource"/>
+		<!-- 需要进行i18n替换的页面,路径使用正则表达式表示 -->
+		<property name="url_patterns">
+			<list>
+				<value>^.+\.html$</value>				
+			</list>
+		</property>
+		
+		<!-- 需要进行i18n忽略替换的路径，比如可以排除一些下载地址等 -->
+		<property name="url_ignore_patterns">
+			<list>
+				<value>^.+\.file$</value><!-- 文件下载地址 -->
+			</list>
+		</property>
+		
+		<property name="i18nMessageReloadPerRequest" value="false"/><!-- 是否每次请求都要刷新一遍i18n配置,设为true可以用于开发环境,生产环境中使用false -->
+	</bean>
+    
+    <!-- web北向接口 -->
+   	<bean id="southInterfaceProcessor" class="com.minlength.platform.core.web.processor.impl.SouthInterfaceProcessorImpl">
+   		<property name="socketTimeout" value="15000"/><!-- 数据传输过程中数据包之间间隔的最大时间 -->
+   		<property name="connectTimeout" value="15000"/><!-- 连接建立时间，三次握手完成时间 -->
+   		<property name="connectionRequestTimeout" value="15000"/><!-- httpclient使用连接池来管理连接，这个时间就是从连接池获取连接的超时时间，可以想象下数据库连接池 -->
+   	</bean>
+    
+</beans>

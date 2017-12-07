@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.examquestions" table="TB_PROJ_EXAMINATIONS_EXAMQUSETIONS">
+		<id name="uuid" type="string" column="uuid" length="256"></id>
+		<property name="creator" type="string" column="creator" length="16"/><!-- 创建人 -->
+		<property name="type" type="string" column="type" length="256"/><!-- 关键字 -->
+		<property name="stem" type="text" column="stem"/><!-- 题干 -->
+		<property name="content" type="text" column="content"/><!-- 选项 -->
+		<property name="analysis" type="text" column="analysis"/><!-- 解析 -->
+		<property name="answer" type="string" column="answer" length="16"/><!-- 试题答案 -->
+		<property name="multi" type="long" column="multi" /><!-- 是否多选 -->
+		<property name="total" type="long">
+			<column name="total" default="0"></column>
+		</property><!-- 总答题人数 -->
+		<property name="wrongnum" type="long">
+		    <column name="wrongnum" default="0"></column>
+		</property><!-- 答错人数 -->
+		<property name="rightnum" type="long">
+		    <column name="rightnum" default="0"></column>
+		</property><!-- 答错人数 -->
+	</class>
+	
+</hibernate-mapping>

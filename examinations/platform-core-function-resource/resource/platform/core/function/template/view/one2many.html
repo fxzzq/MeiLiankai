@@ -1,0 +1,713 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>一对多</title>
+<#include "_import/import_css.html">
+<style>
+.datatable{
+	margin-bottom:0px;
+	border-radius:0px;
+	border:none;
+}
+.chosen-container{
+	width:100% !important;
+}
+.chosen-container-single .chosen-single div{
+	top:10px;
+}
+td{
+	valign:top;
+}
+</style>
+</head>
+<body style="overflow-x:hidden;">
+	<div class="row" style="overflow-x:hidden;">
+		<table style="min-height:400px;">
+			<tr>
+				<td valign="top" style="width:45%;">
+					<div class="row" id="left_queryForm" style="margin-top:20px;">
+					<!-- 查询表单 -->
+					<#list forwardFunction.form as left_prop>
+						<#if left_prop.queryable>
+							<#if left_prop.type == 'input'>
+								<div class="col-md-6">
+									<div class="input-group">  
+							        	<span class="input-group-addon">${left_prop.name}：</span>
+			 							<input id="${left_prop.id}_left" type="text" class="form-control" placeholder="${left_prop.name}"/>
+			 						</div>
+		 						</div>
+			 				<#elseif left_prop.type == 'select'>	
+			 					<div class="col-md-6">
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${left_prop.name}：</span>
+			 							<select class="form-control chosen-select" id="${left_prop.id}_left">	
+			 								<#if left_prop.datasource??>	
+			     								<#if left_prop.datasource.type != 'predefined'>
+			 								<option value="">${component_function_message_select_all!""}</option>	
+			 									</#if>
+			 								</#if>					    		
+				    					</select>
+			 						</div>
+								</div>
+				    		<#elseif left_prop.type == 'multiselect'>				    		
+				    			<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${left_prop.name}：</span>
+			 							<select multiple="multiple" class="form-control chosen-select" id="${left_prop.id}_left">	
+			 								<#if left_prop.datasource??>	
+			     								<#if left_prop.datasource.type != 'predefined'>
+			 								<option value="">${component_function_message_select_all!""}</option>	
+			 									</#if>
+			 								</#if>				    		
+				    					</select>
+			 						</div>
+								</div>	 			
+				    		<#elseif left_prop.type == 'date'>
+				    			<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${left_prop.name}：</span>
+			 							<input id="${left_prop.id}_left" readonly="readonly" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+			 						</div>
+								</div>
+				    		<#elseif left_prop.type == 'time'>
+				    		
+				    		<#elseif left_prop.type == 'datetime'>				    			 
+			 					<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${left_prop.name}：</span>
+			 							<input readonly="readonly" id="${left_prop.id}_left" type="text" class="form-datetime form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+			 						</div>
+								</div>
+			 				</#if>							
+						</#if>						
+					</#list>
+					<#if forwardFunction.id=='dzzg.szyx.xsgl.xsfbform'>
+					<div class="col-md-12" style="text-align:right;">
+						<button type="button" class="btn btn-success" onclick="loadleft(0)"><i class="iconfont icon-chaxun" style="font-size:12px;margin-right:5px;"></i>查询</button>
+					</div>
+					</#if>					   
+				</div>
+					<div style="margin-top:10px;margin-left:40px;">
+						<div class="panel">
+  							<div class="panel-heading">
+  								${unselectedmany.name}
+  							</div>
+  							<div class="panel-body" style="padding:0px;height:auto;">
+  								<table class="table datatable" id="lefttable">
+			  						<thead>
+			    						<tr>
+			      							<th>#</th>
+			      							<#if forwardFunction?? && forwardFunction.form??>
+			      								<#list forwardFunction.form as prop>
+			      									<th>${prop.name!}</th>
+			      								</#list>
+			      							</#if>			      
+			    						</tr>
+			  						</thead>
+			  						<tbody></tbody>
+								</table>
+							</div>					
+  						</div>  	
+  						<div style="text-align:right;">					
+							<ul class="pager" id="left_pager">						
+								<li class="previous disabled"><a href="###">&lt; 上一页</a></li>
+								<li class="active"><a href="###">1</a></li>											
+								<li class="next"><a href="###" onclick="list_query()">下一页 &gt;</a></li>							
+							</ul>					
+						</div>		
+					</div>	
+				</td>
+				<td valign="top" style="">
+					<div style="margin-top:220px;text-align:center;">
+					<#if forwardFunction.id=='dzzg.szyx.xsgl.xsfbform'>
+						<button type="button" class="btn btn-success" onclick="add()">分入班级>></button><br/>
+						<button type="button" class="btn btn-success" style="margin-top:15px;" onclick="_remove()"><<移除班级</button>
+					<#else>
+						<button type="button" class="btn btn-success" onclick="add()">>></button><br/>
+						<button type="button" class="btn btn-success" style="margin-top:15px;" onclick="_remove()"><<</button>
+					</#if>
+					</div>
+				</td>
+				<td valign="top" style="width:45%;">
+				<div class="row" id="right_queryForm" style="margin-top:20px;margin-right:40px;">
+					<!-- 查询表单 -->
+					<#list forwardFunction.form as right_prop>
+						<#if right_prop.queryable>
+							<#if right_prop.type == 'input'>
+								<div class="col-md-6">
+									<div class="input-group">  
+							        	<span class="input-group-addon">${right_prop.name}：</span>
+			 							<input id="${right_prop.id}_right" type="text" class="form-control" placeholder="${right_prop.name}"/>
+			 						</div>
+		 						</div>
+			 				<#elseif right_prop.type == 'select'>	
+			 					<div class="col-md-6">
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${right_prop.name}：</span>
+			 							<select class="form-control chosen-select" id="${right_prop.id}_right">	
+			 								<#if right_prop.datasource??>	
+			     								<#if right_prop.datasource.type != 'predefined'>
+			 								<option value="">${component_function_message_select_all!""}</option>	
+			 									</#if>
+			 								</#if>					    		
+				    					</select>
+			 						</div>
+								</div>
+				    		<#elseif right_prop.type == 'multiselect'>				    		
+				    			<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${right_prop.name}：</span>
+			 							<select multiple="multiple" class="form-control chosen-select" id="${right_prop.id}_right">	
+			 								<#if right_prop.datasource??>	
+			     								<#if right_prop.datasource.type != 'predefined'>
+			 								<option value="">${component_function_message_select_all!""}</option>	
+			 									</#if>
+			 								</#if>				    		
+				    					</select>
+			 						</div>
+								</div>	 			
+				    		<#elseif right_prop.type == 'date'>
+				    			<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${right_prop.name}：</span>
+			 							<input id="${right_prop.id}_right" readonly="readonly" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+			 						</div>
+								</div>
+				    		<#elseif right_prop.type == 'time'>
+				    		
+				    		<#elseif right_prop.type == 'datetime'>				    			 
+			 					<div class="col-md-6">		 				
+				    				<div class="input-group">  
+							        	<span class="input-group-addon">${right_prop.name}：</span>
+			 							<input readonly="readonly" id="${right_prop.id}_right" type="text" class="form-datetime form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+			 						</div>
+								</div>
+			 				</#if>							
+						</#if>						
+					</#list>
+					<#if forwardFunction.id=='dzzg.szyx.xsgl.xsfbform'>
+					<div class="col-md-12" style="text-align:right;">
+						<button type="button" class="btn btn-success" onclick="loadright(0)"><i class="iconfont icon-chaxun" style="font-size:12px;margin-right:5px;"></i>查询</button>
+					</div>		
+					</#if>			   
+				</div>
+				<div style="margin-top:10px;margin-right:40px;">
+			<div class="panel">
+  				<div class="panel-heading">
+  					${selectedmany.name}
+  				</div>
+  				<div class="panel-body" style="padding:0px;height:auto;">
+  					<table class="table datatable" id="righttable">
+			  			<thead>
+			    			<tr>
+			      				<th>#</th>
+			      				<#if forwardFunction?? && forwardFunction.form??>
+			      					<#list forwardFunction.form as prop>
+			      						<th>${prop.name!}</th>
+			      					</#list>
+			      				</#if>			      
+			    			</tr>
+			  			</thead>
+			  			<tbody>			    		
+			  			</tbody>
+					</table>
+				</div>
+  			</div>
+  			<div style="text-align:right;">					
+				<ul class="pager" id="right_pager">						
+					<li class="previous disabled"><a href="###">&lt; 上一页</a></li>
+					<li class="active"><a href="###">1</a></li>											
+					<li class="next"><a href="###" onclick="list_query()">下一页 &gt;</a></li>							
+				</ul>					
+			</div>			
+		</div>
+				</td>
+			</tr>			
+		</table>
+				
+		
+		
+	</div>
+</body>
+<script type="text/javascript">
+var $basePath='${basePath}';
+</script>
+<#include "_import/import_javascript.html">
+<script type="text/javascript">
+var left_cstart = 0;
+var right_cstart = 0;
+
+function loadleft(_left_cstart){
+	try{showLoading('提示','数据加载中...');}catch(e){}	
+	if(typeof(_left_cstart) == 'undefined'){_left_cstart=left_cstart;}
+	var _params = {start: _left_cstart, limit : overall_limit_size,fid:'${_function.id}',opt:'unselectedmany',optfid:'one2many',oneid:${rowid}};
+	var defaultQueryParams1 = getFormValues('left_queryForm');
+	var defaultQueryParams = {};
+	$.each(defaultQueryParams1, function(i, n){
+		defaultQueryParams[i.replace('_left','')] = n;
+	});
+	if(typeof(_params)!='undefined' && _params != null){defaultQueryParams=$.extend(defaultQueryParams,_params);}
+	doAjaxFromUrl('${basePath}function/operation.action',defaultQueryParams,true,function(data){
+		if(data.success){
+			var rows = [];
+			for(var i = 0; i < data.data.length; i++){
+				var obj = {};
+				obj.data = [
+					data.data[i].id
+					<#if forwardFunction?? && forwardFunction.form??>
+			      		<#list forwardFunction.form as prop>
+			      			<#if prop.tooltip>
+			      			,(typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':('<font title="'+data.data[i].${prop.id}+'">'+data.data[i].${prop.id}+'</font>')
+			      			<#else>
+			      			,(typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':data.data[i].${prop.id}
+			      			</#if>
+			      		</#list>
+			      	</#if>
+				];
+				obj.checked = false;
+				rows[rows.length] = obj;
+			}
+			$('#lefttable').datatable('load', {
+				cols: [
+			    	{text: '#', type: 'number', ignore : true}			    	
+			    	<#if forwardFunction?? && forwardFunction.form??>
+			      		<#list forwardFunction.form as prop>
+			      			,{text: '${prop.name}', type:'string'}
+			      		</#list>
+			      	</#if>				    				        				    			        
+			    ],
+				rows: rows
+			});	
+			
+			//更新分页数据
+			if(data != undefined && data != null && data.total != undefined){
+				var cpage = _params.start/_params.limit + 1;//当前页数
+				var totalpage = Math.ceil(data.total/_params.limit);//总页数
+				var pagerHtml = '';
+				if(_params.start == 0){
+					pagerHtml = '<li class="previous disabled"><a href="###">&lt; 上一页</a></li>';
+				}else{
+					pagerHtml = '<li class="previous"><a href="###" onclick="loadleft('+(_params.start-_params.limit)+')">&lt; 上一页</a></li>';
+				}
+				if(data.total <= _params.limit){//总数据量小于一页
+					pagerHtml = pagerHtml + '<li class="active"><a href="###">1</a></li>';
+				}else if(data.total > _params.limit && data.total <= _params.limit * 5){//如果在1~5页之间
+					var page = 1;
+					for(var i = 0; i < data.total; i++){
+						if(i % _params.limit == 0){
+							if(_params.start == i){
+								pagerHtml = pagerHtml + '<li class="active"><a href="###">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+i+')">'+(page++)+'</a></li>';
+							}
+						}
+					}
+				}else{//如果大于5,则从后往前显示5个
+					if(cpage <= 5){//当前页在第5页之前
+						var page = 1;
+						for(var i = 0; i < 5; i++){
+							if(cpage != (i + 1)){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadleft('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}
+						}
+					}else{//当前页在5页之后之后						
+						var startpage = cpage-5;
+						pagerHtml = pagerHtml + '<li>'+
+										'<div class="btn-group" style="float:left;">'+
+										  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+										  '</button>'+
+										  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = 1; i < startpage + 1; i++){
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+						for(var i = startpage+1; i <= cpage; i++){
+							if(i != cpage){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}
+						}						
+					}
+				}
+				if(data.total <= _params.limit){
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}else if(_params.start + _params.limit < data.total){							
+					if(cpage < totalpage && totalpage>5){
+						pagerHtml = pagerHtml + '<li>'+
+												'<div class="btn-group" style="float:left;">'+
+												  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+												  '</button>'+
+												  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = Math.max(cpage+1,6); i <= totalpage; i++){//循环剩余页数
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadleft('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+					}
+					
+					pagerHtml = pagerHtml + '<li class="next"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###" onclick="loadleft('+(_params.start+_params.limit)+')">下一页 &gt;</a></li>';					
+				}else{
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}
+				//pagerHtml = pagerHtml + '<li><a style="border:none;margin-left:1px;">每页'+_params.limit+'条,共'+data.total+'条</a></li>';
+				$('#left_pager').html(pagerHtml);
+			}
+		}				
+	});
+	try{hideLoading();}catch(e){}
+}
+
+function loadright(_right_cstart){
+	try{showLoading('提示','数据加载中...');}catch(e){}	
+	if(typeof(_right_cstart) == 'undefined'){_right_cstart=right_cstart;}
+	var _params = {start: _right_cstart, limit : overall_limit_size,fid:'${_function.id}',opt:'selectedmany',optfid:'one2many',oneid:${rowid}};
+	var defaultQueryParams1 = getFormValues('right_queryForm');
+	var defaultQueryParams = {};
+	$.each(defaultQueryParams1, function(i, n){
+		defaultQueryParams[i.replace('_right','')] = n;
+	});
+	if(typeof(_params)!='undefined' && _params != null){defaultQueryParams=$.extend(defaultQueryParams,_params);}
+	doAjaxFromUrl('${basePath}function/operation.action',defaultQueryParams,true,function(data){
+		if(data.success){
+			right_cstart = _right_cstart;
+			var rows = [];
+			for(var i = 0; i < data.data.length; i++){
+				var obj = {};
+				obj.data = [data.data[i].id
+					<#if forwardFunction?? && forwardFunction.form??>
+			      		<#list forwardFunction.form as prop>
+			      			<#if prop.tooltip>
+			      			,(typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':('<font title="'+data.data[i].${prop.id}+'">'+data.data[i].${prop.id}+'</font>')
+			      			<#else>
+			      			,(typeof(data.data[i].${prop.id})=='undefined'||data.data[i].${prop.id}==null)?'--':data.data[i].${prop.id}
+			      			</#if>
+			      		</#list>
+			      	</#if>
+				];
+				obj.checked = false;
+				rows[rows.length] = obj;
+			}
+			$('#righttable').datatable('load', {
+				cols: [
+			    	{text: '#', type: 'number', ignore : true}
+			    	<#if forwardFunction?? && forwardFunction.form??>
+			      		<#list forwardFunction.form as forwardOpt>
+			      			,{text: '${forwardOpt.name}', type:'string'}
+			      		</#list>
+			      	</#if>
+			    ],
+				rows: rows
+			});	
+			
+			//更新分页数据
+			if(data != undefined && data != null && data.total != undefined){
+				var cpage = _params.start/_params.limit + 1;//当前页数
+				var totalpage = Math.ceil(data.total/_params.limit);//总页数
+				var pagerHtml = '';
+				if(_params.start == 0){
+					pagerHtml = '<li class="previous disabled"><a href="###">&lt; 上一页</a></li>';
+				}else{
+					pagerHtml = '<li class="previous"><a href="###" onclick="loadright('+(_params.start-_params.limit)+')">&lt; 上一页</a></li>';
+				}
+				if(data.total <= _params.limit){//总数据量小于一页
+					pagerHtml = pagerHtml + '<li class="active"><a href="###">1</a></li>';
+				}else if(data.total > _params.limit && data.total <= _params.limit * 5){//如果在1~5页之间
+					var page = 1;
+					for(var i = 0; i < data.total; i++){
+						if(i % _params.limit == 0){
+							if(_params.start == i){
+								pagerHtml = pagerHtml + '<li class="active"><a href="###">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+i+')">'+(page++)+'</a></li>';
+							}
+						}
+					}
+				}else{//如果大于5,则从后往前显示5个
+					if(cpage <= 5){//当前页在第5页之前
+						var page = 1;
+						for(var i = 0; i < 5; i++){
+							if(cpage != (i + 1)){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadright('+(i*_params.limit)+')">'+(page++)+'</a></li>';
+							}
+						}
+					}else{//当前页在5页之后之后						
+						var startpage = cpage-5;
+						pagerHtml = pagerHtml + '<li>'+
+										'<div class="btn-group" style="float:left;">'+
+										  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+										  '</button>'+
+										  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = 1; i < startpage + 1; i++){
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+						for(var i = startpage+1; i <= cpage; i++){
+							if(i != cpage){
+								pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}else{
+								pagerHtml = pagerHtml + '<li class="active"><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+							}
+						}						
+					}
+				}
+				if(data.total <= _params.limit){
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}else if(_params.start + _params.limit < data.total){							
+					if(cpage < totalpage && totalpage>5){
+						pagerHtml = pagerHtml + '<li>'+
+												'<div class="btn-group" style="float:left;">'+
+												  '<button type="button" style="border-radius:0px;border-left:none;border-right:none;background-color:#FFFFFF;border-color:#ddd;" class="btn dropdown-toggle" data-toggle="dropdown">...<span class="caret"></span>'+
+												  '</button>'+
+												  '<ul class="dropdown-menu" role="menu" style="min-width: 0px;">';						
+						for(var i = Math.max(cpage+1,6); i <= totalpage; i++){//循环剩余页数
+							pagerHtml = pagerHtml + '<li><a href="###" onclick="loadright('+((i-1)*_params.limit)+')">'+i+'</a></li>';
+						}						
+						pagerHtml = pagerHtml + '</ul></div></li>';
+					}
+					
+					pagerHtml = pagerHtml + '<li class="next"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###" onclick="loadright('+(_params.start+_params.limit)+')">下一页 &gt;</a></li>';					
+				}else{
+					pagerHtml = pagerHtml + '<li class="next disabled"><a style="border-top-right-radius: 4px;border-bottom-right-radius: 4px;" href="###">下一页 &gt;</a></li>';
+				}
+				//pagerHtml = pagerHtml + '<li><a style="border:none;margin-left:1px;">每页'+_params.limit+'条,共'+data.total+'条</a></li>';
+				$('#right_pager').html(pagerHtml);
+			}			
+		}				
+	});
+	try{hideLoading();}catch(e){}
+}
+
+function getTableSelected(id){
+	var result = {ids:[]};
+	var table = $('#'+id).data('zui.datatable');
+	if(table.checks == undefined || table.checks == null || table.checks.checks.length == 0){
+		alertError('请选择需要操作的数据行!');
+		throw e;
+	}
+	if(table != undefined && table != null){
+		var rows = table.data.rows;
+		if(rows != null && rows.length > 0){
+			$.each(rows, function(i,n){
+				if(n.checked){
+					result.ids[result.ids.length] = n.data[0];
+				}
+			});
+		}
+	}
+	return result;
+}
+
+function add(){
+
+	doAjaxFromUrl('${basePath}function/operation.action',{fid:'${_function.id}',opt:'addmanytoone',optfid:'one2many',oneid:${rowid},manyid:getTableSelected('lefttable').ids},true,function(data){
+		if(data.success){
+			alertSuccess('新增成功!');
+			loadleft();
+			loadright();
+		}else {
+			alertError('操作失败!');
+		}			
+	});
+	
+}
+
+function _remove(){
+	doAjaxFromUrl('${basePath}function/operation.action',{fid:'${_function.id}',opt:'removemanytoone',optfid:'one2many',oneid:${rowid},manyid:getTableSelected('righttable').ids},true,function(data){
+		if(data.success){
+			alertSuccess('移除成功!');
+			loadleft();
+			loadright();
+		}else {
+			alertError('操作失败!');
+		}			
+	});
+}
+
+$(document).ready(function(){
+	try{
+		initLoading();
+		showLoading('提示','数据加载中...');
+	}catch(e){}	
+	//初始化左侧查询表单下拉选择项
+	<#list forwardFunction.form as left_prop>
+		  	  <#if left_prop.queryable>
+		  	  	<#if left_prop.type == 'date'>
+			  	  	$('#${left_prop.id}_left').datetimepicker({
+				  	  	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 2,
+				  	    minView: 2,
+				  	    forceParse: 0,
+				  	    format: "yyyy-mm-dd"
+				  	});
+		  	  	<#elseif left_prop.type == 'time'>
+			  	    $('#${left_prop.id}_left').datetimepicker({
+			  	      	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 1,
+				  	    minView: 0,
+				  	    maxView: 1,
+				  	    forceParse: 0,
+				  	    format: 'hh:ii'
+				  	});
+		  	  	<#elseif left_prop.type == 'datetime'>
+			  		//初始化日期选择框
+					$('#${left_prop.id}_left').datetimepicker({
+					    weekStart: 1,
+					    todayBtn:  1,
+					    autoclose: 1,
+					    todayHighlight: 1,
+					    startView: 2,
+					    forceParse: 0,
+					    showMeridian: 1,
+					    format: "yyyy-mm-dd hh:ii"
+					});
+					
+					//初始化下拉选项的值
+		  	  	<#elseif left_prop.type == 'multiselect' || left_prop.type == 'select'>
+		  	  		<#if left_prop.datasource??>	
+			     		<#if left_prop.datasource.type == 'predefined'>
+			     			try{
+			     				var _value_${left_prop.id}_left_msg = '${left_prop.datasource.value?replace('\'','"')}';
+			     				var _value_${left_prop.id}_left = JSON.parse(_value_${left_prop.id}_left_msg);
+			     				if(_value_${left_prop.id}_left != undefined && _value_${left_prop.id}_left != null && _value_${left_prop.id}_left.length!=undefined){	
+			     					var hashAllFlag = false;		     					
+			     					for(var i = 0; i < _value_${left_prop.id}_left.length; i++){
+			     						if(_value_${left_prop.id}_left[i].id==-1||_value_${left_prop.id}_left[i].id==''||_value_${left_prop.id}_left[i].id=='-1'){hashAllFlag=true;}
+			     						$('#${left_prop.id}_left').append('<option value='+_value_${left_prop.id}_left[i].id+'>'+_value_${left_prop.id}_left[i].name+'</option>');
+			     					}
+			     					if(!hashAllFlag){
+			     						$('#${left_prop.id}_left').prepend('<option value="" selected>全部</option>');
+			     					}
+			     				}			     							     			
+			     			}catch(e){alert(e);}
+			     		<#elseif left_prop.datasource.type == 'ajax'>
+		     				var _value_${left_prop.id}_left = '${left_prop.datasource.value}';
+		     				var _value_split_${left_prop.id}_left = _value_${left_prop.id}_left.split(':');
+		     				doAjax(_value_split_${left_prop.id}_left[0],_value_split_${left_prop.id}_left[1],{},false,function(data){
+		     					try{
+		     						if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){
+		     							var hashAllFlag = false;			     					
+			     						$.each(data.data, function(i,n){	
+			     							if(n.id==-1||n.id==''||n.id=='-1'){hashAllFlag=true;}	     							
+			     							$('#${left_prop.id}_left').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+			     						});
+			     						if(!hashAllFlag){
+			     							$('#${left_prop.id}_left').prepend('<option value="" selected>全部</option>');
+			     						}
+			     					}
+		     					}catch(e){}finally{}		     					
+		     				});			     				
+			     		</#if>					     								     		
+			     	</#if>
+		  	  	</#if>
+		  	  </#if>
+			</#list>
+			
+	//初始化右侧查询表单下拉选择项
+	<#list forwardFunction.form as right_prop>
+		  	  <#if right_prop.queryable>
+		  	  	<#if right_prop.type == 'date'>
+			  	  	$('#${right_prop.id}_right').datetimepicker({
+				  	  	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 2,
+				  	    minView: 2,
+				  	    forceParse: 0,
+				  	    format: "yyyy-mm-dd"
+				  	});
+		  	  	<#elseif right_prop.type == 'time'>
+			  	    $('#${right_prop.id}_right').datetimepicker({
+			  	      	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 1,
+				  	    minView: 0,
+				  	    maxView: 1,
+				  	    forceParse: 0,
+				  	    format: 'hh:ii'
+				  	});
+		  	  	<#elseif right_prop.type == 'datetime'>
+			  		//初始化日期选择框
+					$('#${right_prop.id}_right').datetimepicker({
+					    weekStart: 1,
+					    todayBtn:  1,
+					    autoclose: 1,
+					    todayHighlight: 1,
+					    startView: 2,
+					    forceParse: 0,
+					    showMeridian: 1,
+					    format: "yyyy-mm-dd hh:ii"
+					});
+					
+					//初始化下拉选项的值
+		  	  	<#elseif right_prop.type == 'multiselect' || right_prop.type == 'select'>
+		  	  		<#if right_prop.datasource??>	
+			     		<#if right_prop.datasource.type == 'predefined'>
+			     			try{
+			     				var _value_${right_prop.id}_right_msg = '${right_prop.datasource.value?replace('\'','"')}';
+			     				var _value_${right_prop.id}_right = JSON.parse(_value_${right_prop.id}_right_msg);
+			     				if(_value_${right_prop.id}_right != undefined && _value_${right_prop.id}_right != null && _value_${right_prop.id}_right.length!=undefined){	
+			     					var hashAllFlag = false;		     					
+			     					for(var i = 0; i < _value_${right_prop.id}_right.length; i++){
+			     						if(_value_${right_prop.id}_right[i].id==-1||_value_${right_prop.id}_right[i].id==''||_value_${right_prop.id}_right[i].id=='-1'){hashAllFlag=true;}
+			     						$('#${right_prop.id}_right').append('<option value='+_value_${right_prop.id}_right[i].id+'>'+_value_${right_prop.id}_right[i].name+'</option>');
+			     					}
+			     					if(!hashAllFlag){
+			     						$('#${right_prop.id}_right').prepend('<option value="" selected>全部</option>');
+			     					}
+			     				}			     							     			
+			     			}catch(e){}
+			     		<#elseif right_prop.datasource.type == 'ajax'>
+		     				var _value_${right_prop.id}_right = '${right_prop.datasource.value}';
+		     				var _value_split_${right_prop.id}_right = _value_${right_prop.id}_right.split(':');
+		     				doAjax(_value_split_${right_prop.id}_right[0],_value_split_${right_prop.id}_right[1],{},false,function(data){
+		     					try{
+		     						if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){
+		     							var hashAllFlag = false;			     					
+			     						$.each(data.data, function(i,n){	
+			     							if(n.id==-1||n.id==''||n.id=='-1'){hashAllFlag=true;}	     							
+			     							$('#${right_prop.id}_right').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+			     						});
+			     						if(!hashAllFlag){
+			     							$('#${right_prop.id}_right').prepend('<option value="" selected>全部</option>');
+			     						}
+			     					}
+		     					}catch(e){}finally{}		     					
+		     				});			     				
+			     		</#if>					     								     		
+			     	</#if>
+		  	  	</#if>
+		  	  </#if>
+			</#list>
+	$('select.chosen-select').chosen({
+		no_results_text: '',
+		disable_search_threshold: 2,
+		max_selected_options : 20,
+		search_contains: true,
+		allow_single_deselect : true
+	});	
+	$('table.datatable').datatable({checkable: true,storage:false});
+	//加载未选择数据	
+	loadleft();
+	loadright();
+	try{hideLoading();}catch(e){}	
+});
+</script>
+</html>

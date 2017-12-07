@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="${basePath}_1/image/logo-b.png" />
+<title>腾讯智慧校园</title>
+<link rel="stylesheet" href="${basePath}_1/lib/layui/css/layui.css">
+<style>
+.layui-breadcrumb a{
+	color:rgba(255, 255, 255, 0.7) !important;
+}
+.layui-breadcrumb a:hover{
+	color : #FFFFFF !important;
+}
+body,span,div,a,th,td {
+				font-family: Arial,"Times New Roman", "Microsoft YaHei", -apple-system, BlinkMacSystemFo
+		}
+.layui-nav-tree .layui-nav-child dd.layui-this, .layui-nav-tree .layui-nav-child dd.layui-this a, .layui-nav-tree .layui-this, .layui-nav-tree .layui-this > a, .layui-nav-tree .layui-this > a:hover{
+	background-color:rgb(50, 157, 56);
+}
+.layui-nav-tree .layui-nav-bar{
+	background-color:rgb(50, 157, 56);
+}
+.layui-nav .layui-this::after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed::after{
+	background-color:rgb(50, 157, 56);
+}
+</style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">
+    	<img src="${basePath}_1/image/logo.png" style="width:30px;height:30px;display:block;display:auto;position:relative;top:13px;padding-left:6px;"></img>
+    	<span style="width: 160px;float: right;text-align: left;padding-left: 5px;font-size: 22px;line-height: 20px;color: rgb(255, 255, 255);font-weight: bold;margin-top: -12px;letter-spacing: 0px;">
+    		<!-- <div>南充卫生学校</div> -->
+    		<div>腾讯智慧校园</div>
+    	</span>
+    </div>
+    
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">      
+    	<#if topmenus??>    	
+    		<#list topmenus as topmenu>
+    			<#if topmenu_index &lt;= 6>
+    				<li class="layui-nav-item <#if topmenu_index=0>layui-this</#if>" onclick="loadLeftMenu('${topmenu.id}')" tm="true" menuid="${topmenu.id}"><a href="#">${topmenu.name!}</a></li> 
+    			</#if>    			
+    		</#list>
+    	</#if>
+    	
+    	<#if topmenus?? && (topmenus?size&gt;6)>    	
+    	<li class="layui-nav-item"><a href="javascript:;">更多功能</a><dl class="layui-nav-child">
+    	</#if>
+    	
+    	<#if topmenus??>    	
+    		<#list topmenus as topmenu>
+    			<#if topmenu_index &gt; 6>
+    			<dd><a href="#" onclick="loadLeftMenu('${topmenu.id}')" tm="true">${topmenu.name!}</a></dd>   
+    			</#if>			
+    		</#list>
+    	</#if>
+    	
+    	<#if topmenus?? && (topmenus?size&gt;6)>
+    	</dl></li>
+    	</#if>
+    	    	
+    </ul>
+    
+    <!-- 顶部右侧 -->
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item" style="min-width:100px;">
+        <a href="javascript:;">
+          <#if loginuser??>
+          	${loginuser.account!}          
+          </#if>
+          
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="${basePath}security/auth/logout.do">退出系统</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- 进行左侧菜单生成 -->
+  
+  
+  <!-- 左侧菜单 -->
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll" id="leftmenu">
+      <div style="height:30px;width:190px;padding-top:15px;padding-left:10px;font-weight:bold;background:rgba(131, 129, 129, 0.28) none repeat scroll 0% 0%;">导航菜单</div>
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+      <#if topmenus??>    	
+  	  	<#list topmenus as topmenu>
+    	    <#if topmenu.children??>
+    	    	<#if (topmenu.children?size&gt;0)>    	    		
+    	    		<#list topmenu.children as child>
+    	    			<#if child.children?? && (child.children?size&gt;0)>
+    	    				<li class="layui-nav-item layui-nav-itemed" style="display:none;" pid="${topmenu.id}" lm="true">
+          						<a class="" href="javascript:;">${child.name}</a>
+          						<dl class="layui-nav-child">
+    	    					<#list child.children as subchild>
+    	    							<dd><a onclick="_addPath('${subchild.name}','${subchild.value!}', true)" href="${subchild.value!}" target="_workspace">${subchild.name}</a></dd>
+    	    					</#list>
+    	    				</dl>
+        					</li>
+    	    			<#else>
+    	    				<li class="layui-nav-item" style="display:none;" pid="${topmenu.id}" lm="true"><a  onclick="_addPath('${child.name}','${child.value!}', true)" href="${child.value!}" target="_workspace">${child.name}</a></li>    	    				
+    	    			</#if>
+    	    		</#list>    	    		    	    		    	 
+    	    	</#if>    	    
+    	    </#if>			
+    	</#list>
+  	  </#if>
+  	  </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body" style="bottom:0px;">
+  	<div style="width:100%;background:#393D49;padding-left:40px;height:33px;padding-top:13px;">
+  		<span class="layui-breadcrumb">  			
+		</span>
+  	</div>
+  	<div style="width: 100%;position: absolute;top: 45px;bottom: 0px;left: 0px;">
+	    <!-- 内容主体区域 -->
+	    <iframe src="${basePath}view/home.html" frameborder="0" marginheight="0" marginwidth="0" id="_workspace" name="_workspace" width="100%" height="100%" style="overflow-y:hidden;"></iframe>
+    </div>
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+var $basePath = '${basePath}';
+</script>
+<script type="text/javascript" src="${basePath}_1/lib/layui/layui.js"></script>
+<script type="text/javascript" src="${basePath}_1/lib/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="${basePath}_1/js/Outside.js"></script>
+<script type="text/javascript" src="${basePath}_1/js/Overall.js"></script>
+<script type="text/javascript">
+layui.use('element', function(){
+	var element = layui.element;
+});
+function loadLeftMenu(pid){
+	//显示子菜单
+	var all_menus = $('.layui-nav-item[lm=true]');
+	for(var i = 0; i < all_menus.length; i++){
+		$(all_menus[i]).css({display:'none'});
+	}
+	var menus = $('.layui-nav-item[pid='+pid+']');
+	for(var i = 0; i < menus.length; i++){
+		if(i == 0){
+			var url = $(menus[i]).find('a').attr('href');
+			if(url == 'javascript:;'){
+				url = $(menus[i]).find('dl').first().find('dd').first().find('a').attr('href');
+				var aaa = $(menus[i]).find('dl').first().find('dd').first().find('a');
+				$('#_workspace').attr('src',url);
+				_addPath(aaa.text(), url, true);
+			}else{
+				$('#_workspace').attr('src',url);
+				_addPath($(menus[i]).text(),url, true);
+			}
+			
+		}
+		$(menus[i]).css({display:''});
+	}
+	
+}
+
+$(document).ready(function(){
+  //第一个按钮
+  	var all_menus = $('.layui-nav-item[tm=true]');
+	$(all_menus[0]).click();
+	var menus = $('.layui-nav-item[pid='+$(all_menus[0]).attr('menuid')+']');
+	if(typeof(menus)!='undefined' && typeof(menus.length) != 'undefined' && menus.length > 0){
+			var url = $(menus[i]).find('a').attr('href');
+			if(url == 'javascript:;'){
+				url = $(menus[i]).find('dl').first().find('dd').first().find('a').attr('href');
+				var aaa = $(menus[i]).find('dl').first().find('dd').first().find('a');
+				$('#_workspace').attr('src',url);
+				_addPath(aaa.text(), url, true);
+			}else{
+				$('#_workspace').attr('src',url);
+				_addPath($(menus[i]).text(),url, true);
+			}
+	}
+});
+</script>
+</body>
+</html>

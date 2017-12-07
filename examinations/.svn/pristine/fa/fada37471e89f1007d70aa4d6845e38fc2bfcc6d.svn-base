@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="${basePath}_1/lib/mui/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="${basePath}Student/css/ClassPractice.css" />
+		<style>
+			.mui-pull-bottom-pocket,
+			.mui-pull-top-pocket {
+				visibility: visible;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+
+				<div class="mui-input-row mui-search" id="seacher">
+					<input type="search" class="mui-input-clear" placeholder="搜索">
+				</div>
+
+				<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+					<li class="mui-table-view-cell " id="unfinish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习A</h4>
+
+								<p class=" mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right ">
+								<span class="mui-h5 unfinish">未完成</span>
+							</div>
+						</div>
+					</li>
+
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis">受力分析随堂练习B</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis">受力分析随堂练习C</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+					<li class="mui-table-view-cell" id="finish">
+
+						<div class=" mui-table">
+							<div class="mui-table-cell mui-col-xs-10 listfont">
+								<h4 class="mui-ellipsis ">受力分析随堂练习D</h4>
+
+								<p class="mui-h5 mui-ellipsis listfont2">三年级
+									<span>物理</span> <span>力学部分</span> <span>受力分析</span>
+								</p>
+
+							</div>
+							<div class="mui-table-cell mui-col-xs-2 mui-text-right">
+								<span class="mui-h5 finish">已完成</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script src="${basePath}_1/lib/mui/js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui('.mui-table-view').on('tap', '#unfinish', function() {
+				mui.openWindow({
+					url: 'Answer.html'
+				});
+			});
+			mui('.mui-table-view').on('tap', '#finish', function() {
+				mui.openWindow({
+					url: 'AnswerResult.html'
+				});
+			})
+		</script>
+		<script>
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						contentnomore: '没有更多数据了',
+						callback: pullupRefresh
+					}
+				}
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				}, 1500);
+			}
+			var count = 0;
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for(var i = cells.length, len = i + 3; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						/*	li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';*/
+						li.innerHTML = '<div class=" mui-table">' +
+							'<div class="mui-table-cell mui-col-xs-10 listfont">' +
+							'<h4 class="mui-ellipsis ">受力分析随堂练习D' + (i + 1) + '</h4>' +
+							'<p class="mui-h5 mui-ellipsis listfont2">三年级' +
+							'<span>物理</span> <span>力学部分</span> <span>受力分析</span>' +
+							'</p>' +
+							'</div>' +
+							'<div class="mui-table-cell mui-col-xs-2 mui-text-right">' +
+							'<span class="mui-h5 finish">已完成</span>' +
+							'</div>' +
+							'</div>';
+						//新纪录插到最前面；
+						//table.insertBefore(li, table.firstChild);
+						//新纪录插到最最后面；
+						table.appendChild(li);
+
+					}
+				}, 1500);
+			}
+			//			if (mui.os.plus) {
+			//				mui.plusReady(function() {
+			//					setTimeout(function() {
+			//						mui('#pullrefresh').pullRefresh().pullupLoading();
+			//					}, 10);
+			//
+			//				});
+			//			} else {
+			//				mui.ready(function() {
+			//					mui('#pullrefresh').pullRefresh().pullupLoading();
+			//				});
+			//			}
+		</script>
+	</body>
+
+</html>

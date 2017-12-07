@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<#include "_import/import_css.html">
+		<style type="text/css">
+			body {
+				padding: 0;
+				margin: 0;
+				overflow:hidden;
+			}
+			.timetablediv {
+				border: solid 1px #FAFBFC;
+				background-color: #FAFBFC;
+				width: 100%;
+			}
+			table {
+				border-collapse: collapse;
+				text-align: center;
+				width:100%;
+			}
+			
+			.time-head-table {
+				/*width: 816px;*/
+			}
+			
+			.time-body-table {
+				/*border: solid 1px #BCD68D;*/
+			}
+			
+			thead,thead th {
+				height: 30px;
+				font-size: 13px;
+				line-height: 25px;
+				text-align: center;
+			}
+			
+			.scroll-tbody {
+				margin-left: -1px;
+				position:fixed; 
+				overflow: auto;
+				/*width: 833px;
+				height:407px;*/
+			}
+			
+			.scroll-tbody tr {
+				min-height: 50px;
+				height: 50px;
+			}
+			
+			td {
+				/*border: solid 1px #BCD68D;*/
+				font-size: 12px;
+				line-height: 25px;
+				position:relative;
+				height:100%;
+				/*width: 100.875px;*/
+			}
+			.scroll-tbody .even {
+				background-color: #FFFFFF;
+			}
+			
+			.scroll-tbody .odd {
+				background-color: #DDDDDD;
+			}
+			
+			span {
+				padding-left: 2px;
+				padding-right: 2px;
+			}
+			
+			td a:link { text-decoration: none; } 
+			td a:visited { text-decoration: none; } 
+			td a:hover { text-decoration: none; } 
+			td a:active { text-decoration: none; }
+			
+			.kebiaocell {
+				width: 100%;
+				/*height:100%;*/
+				white-space:normal;
+				word-break:break-all;
+			}
+			.kebiaocell-content {
+				margin-right:5px;
+				margin-left:5px;
+				margin-top:1px;
+				margin-bottom:1px;
+				border: solid 1px #ECF5FD;
+				border-radius: 5px;
+				background-color: #ECF5FD;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<#if function.form??>
+			<div class="row" id="queryForm">
+				<!-- 查询表单 -->
+				<#list function.form as prop>
+					<#if prop.queryable>
+						<#if prop.type == 'input'>
+							<div class="col-md-3">
+								<div class="input-group">  
+						        	<span class="input-group-addon">${prop.name}：</span>
+		 							<input id="${prop.id}" type="text" class="form-control" placeholder="${prop.name}"/>
+		 						</div>
+	 						</div>
+		 				<#elseif prop.type == 'select'>	
+		 					<div class="col-md-3">
+			    				<div class="input-group">  
+						        	<span class="input-group-addon">${prop.name}：</span>
+		 							<select class="form-control chosen-select" id="${prop.id}">	
+		 								<#if prop.datasource??>	
+		     								<#if prop.datasource.type != 'predefined'>
+		 								<option value="">${component_function_message_select_all!""}</option>	
+		 									</#if>
+		 								</#if>					    		
+			    					</select>
+		 						</div>
+							</div>
+			    		<#elseif prop.type == 'multiselect'>				    		
+			    			<div class="col-md-3">		 				
+			    				<div class="input-group">  
+						        	<span class="input-group-addon">${prop.name}：</span>
+		 							<select multiple="multiple" class="form-control chosen-select" id="${prop.id}">	
+		 								<#if prop.datasource??>	
+		     								<#if prop.datasource.type != 'predefined'>
+		 								<option value="">${component_function_message_select_all!""}</option>	
+		 									</#if>
+		 								</#if>				    		
+			    					</select>
+		 						</div>
+							</div>	 			
+			    		<#elseif prop.type == 'date'>
+			    			<div class="col-md-3">		 				
+			    				<div class="input-group">  
+						        	<span class="input-group-addon">${prop.name}：</span>
+		 							<input id="${prop.id}" readonly="readonly" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+		 						</div>
+							</div>
+			    		<#elseif prop.type == 'time'>
+			    		
+			    		<#elseif prop.type == 'datetime'>				    			 
+		 					<div class="col-md-3">		 				
+			    				<div class="input-group">  
+						        	<span class="input-group-addon">${prop.name}：</span>
+		 							<input readonly="readonly" id="${prop.id}" type="text" class="form-datetime form-control" style="border-radius:4px;background-color:#ffffff;">			 							
+		 						</div>
+							</div>
+		 				</#if>							
+					</#if>						
+				</#list>					   
+			</div>
+			</#if>
+			
+			<#list function.operations as opt>
+				<#if opt.location == 'BATCH'>
+					<#assign hasBatch = '1'>
+					<#break/>
+				</#if>
+	
+			</#list>		
+			<#if hasBatch?? && hasBatch == '1'>
+				<div class="row operationrow">
+					<!-- 功能项 -->
+					<#list function.operations as opt>
+						<#if opt.location == 'BATCH'>
+							<button type="button" class="btn btn-success" id="${opt.id}" onclick="_click_${opt.id}()">
+							<#if opt.iconCls?? && opt.iconCls!=''>
+								<#if opt.iconCls == 'btn-cx'>
+									<i class="iconfont icon-chaxun" style="margin-right:3px;font-size:12px"></i>																														
+								<#else>
+									<i class="${opt.iconCls!}" style="margin-right:3px;font-size:12px"></i>
+								</#if>
+							<#else>
+								<#if opt.id == 'paikeAutomatic'>
+									<i class="iconfont icon-zidongpaike" style="margin-right:3px;font-size:12px"></i>
+								<#elseif opt.id == 'clearPaike'>
+									<i class="iconfont icon-qingkong" style="margin-right:3px;font-size:12px"></i>
+								<#elseif opt.id == 'print'>
+									<i class="iconfont icon-ccgl-dayinliebiao-3" style="margin-right:3px;font-size:12px"></i>
+								</#if>
+							</#if>
+							${opt.name}
+							</button>
+						</#if> 
+		
+					</#list>					
+				</div>
+			</#if>
+			<div class="timetablediv">
+				<table class="time-head-table" cellpadding="0" cellspacing="0">
+					<thead class="fixed-thead">
+						<tr>
+							<th>时间</th>
+							<th>周一</th>
+							<th>周二</th>
+							<th>周三</th>
+							<th>周四</th>
+							<th>周五</th>
+							<th>周六</th>
+							<th>周日</th>
+						</tr>
+						
+					</thead>
+				</table>
+				<table class="time-body-table" cellpadding="0" cellspacing="0">
+					<tbody class="scroll-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- 排课课程 -->
+		<div class="modal fade" id="querykc">
+			<div class="modal-dialog modal-lg" style="width:1000px;">
+		    	<div class="modal-content">
+		    		<div class="modal-header">
+				  		<button type="button" class="close" data-dismiss="modal" id="closeQuerykc"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+				  		<h4 class="modal-title" id="titlename"></h4>
+			  		</div>
+			  		<div class="modal-body" style="height:450px;padding-top:8px;margin:0;">
+						<iframe src="" marginheight="0" marginwidth="0" id="_timetable_openwindow" name="_timetable_openwindow" style="overflow:hidden;" scroll="no" width="100%" height="100%" frameborder="0"></iframe>
+					</div>
+					<!-- 
+					<div class="modal-footer">
+			  			<button type="button" class="btn" id="close"><i class="btn-cancel"></i>关闭</button>
+			  		</div> -->
+				</div>
+			</div>
+		</div>	
+		<!-- 确认对话框 -->
+		<div class="modal fade" id="confirmModal">
+			<div class="modal-dialog modal-sm">
+		    	<div class="modal-content">
+		    		<div class="modal-header">
+				  		<button type="button" class="close" data-dismiss="modal" id="closeConfirmModal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+				  		<h4 class="modal-title">提示</h4>
+			  		</div>
+			  		<div class="modal-body">
+						<p id="optTip"></p>
+					</div>
+					<div class="modal-footer">
+			  			<button type="button" class="btn btn-success" data-dismiss="modal" id="confirmcancel"><i class="iconfont icon-quxiao" style="margin-right:3px;font-size:12px;"></i>取消</button>
+        				<button type="button" class="btn btn-success" id="confirm"><i class="iconfont icon-queren" style="margin-right:3px;font-size:12px;"></i>确定</button>
+			  		</div>
+				</div>
+			</div>
+		</div>	
+		
+	</body>
+	<script type="text/javascript">
+		var $basePath='${basePath}';
+		var fid = '${function.id}';
+	</script>
+	<#include "_import/import_javascript.html">
+		<script type="text/javascript">
+			//窗口大小改变，调整表格
+			function resize() {
+				//屏幕可见区域高度和宽度
+			    var clientHeight = $(window).height();
+			    var clientWidth = $(window).width();
+
+			    var queryFormHeight = $("#queryForm").height() != null ? $("#queryForm").height() + 20 : 0;
+			    var operationrowHeight = $(".operationrow").height() != null ? $(".operationrow").height() + 10 : 0;
+			    $(".time-head-table").width(clientWidth-17);
+			    $(".scroll-tbody").width(clientWidth);
+			    $(".scroll-tbody").height(clientHeight - 34 - queryFormHeight - operationrowHeight);
+			    
+
+//				var tdWidth = (clientWidth-17-$("thead th").length-1)/$("thead th:visible").length;
+				var tdWidth = (clientWidth-17)/$("thead th:visible").length;
+
+			    $(".time-head-table th").width(tdWidth);
+			    var userAgent = window.navigator.userAgent.toLowerCase();
+			    if (/msie 8\.0/i.test(userAgent)) {
+			    	tdWidth = tdWidth + 2;
+			    }
+			    $(".scroll-tbody td").width(tdWidth);
+			}
+			
+			/**
+			 * 课表相关操作，_params需要将fid、opt、以及所有参数的json串
+			 * @param _params
+			 */
+			 //默认选择的排课参数，包括学期id，周几，第几节等参数
+			var defaultParams = null;
+			function kbHandler(_params,owner) {
+				if (_params.viewfid) {
+					var fields = {fields:_params};
+					fields.title = _params.title;
+					defaultParams = _params;
+					
+					var src = "${basePath}view/listview.html?magicboy=yes&fid=" + _params.viewfid;
+					$("#_timetable_openwindow").attr("src",src);
+					$("#titlename").text(_params.title);
+					$('#querykc').modal({backdrop:'static',moveable:true,position:'fit'});
+					return;
+				} 
+				
+				doAjaxFromUrl('${basePath}function/operation.action', _params, false, function(data, scope){
+					if(data.success){
+						//刷新页面
+						loadTimetable();
+					}else{
+						Ext.MessageBox.alert('错误',data.emsg);
+					}
+				},null,null);  
+			}
+			
+			//组装单元格内容
+			function getCellHtml(value) {
+				var result = "<div class='kebiaocell'>";
+				var opt = "<span style='color:#747474;'><i class='iconfont icon-tianjia'></i></span>";
+		    	if (value.centerlabel) {
+		    		var centeropt = value.centeropt?(" href='javascript:void(0);' onclick='kbHandler(" + value.centeropt + ",this);'"):"";
+		    		var centerstyle = value.centeropt?" id='centerlabel'":"";
+		    		result += "<a" + centerstyle + centeropt + ">" + value.centerlabel + "</a>";
+		    		opt = "<span style='color:#bfbfbf;'><i class='iconfont icon-qingkong'></i></span>";
+		    	} 
+		    	if (value.opt1) {
+		    		var opt1 = value.opt1?(" href='javascript:void(0);' onclick='kbHandler(" + value.opt1 + ",this);'"):"";
+		    		result += "<a id='opt1label'" + opt1 + " style='" + (opt.indexOf('qingkong') > 0 ?'position:absolute;right:0px;top:15px;' : '') + "'>" + opt + "</a>";
+		    	}
+		    	result += "</div>";
+		    	return result;
+			}
+			
+			var dataList = ['sections','monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+			/*加载课表数据*/
+			function loadTimetable() {
+				var url = "${basePath}function/operation.action";
+				var params = {fid:'${function.id}',opt:'if4query'};
+				params = $.extend(params,getFormValues('queryForm'));
+				doAjaxFromUrl(url,params,true,function(data){
+					updateTableData(data);
+				});
+			}
+			
+			//为了兼容ModifyDefManager的修改,更新课表数据
+			function updateTableData(data) {
+				if(data.success){
+					$(".scroll-tbody").empty();
+					if (data.data != undefined && data.data != null) {
+						for (var i in data.data) {
+							var $tr = $("<tr></tr>");
+							
+							for (j in dataList) {
+								var result = getCellHtml(data.data[i][dataList[j]]);
+								$tr.append("<td>" + result + "</td>");
+							}
+							
+							$(".scroll-tbody").append($tr[0].outerHTML);
+						}
+						
+						var total = data.data.length;
+	            		var count = 0;
+	            		for (var i=0;i<total;i++) {
+	            			var centerlabel = data.data[i].sunday.centerlabel;
+	            			//无课表安排
+	            			if (!centerlabel && !data.data[i].sunday.opt1) {
+	            				count++;
+	            			}
+	            			
+	            		}
+	        			if (count != 0 && count == total) {
+	        				$($("thead th")[7]).hide();
+	        				$('.scroll-tbody tr').find('td:eq(7)').hide();
+	            		} else  {
+	            			$($("thead th")[7]).show();
+	            			$('.scroll-tbody tr').find('td:eq(7)').show();
+	            		}
+					}
+					resize();
+					 $("tr:even").addClass("even");  //奇数行的样式
+					 $("tr:odd").addClass("odd");  //偶数行的样式
+				} else {
+					alertError(data.emsg);
+				}
+			}
+			
+			function initQueryForm() {
+				//初始化日期选择
+				<#if function.form??>
+					<#list function.form as prop>
+				  	  <#if prop.queryable>
+				  	  	<#if prop.type == 'date'>
+					  	  	$('#${prop.id}').datetimepicker({
+						  	  	language:  "zh-CN",
+						  	    weekStart: 1,
+						  	    todayBtn:  1,
+						  	    autoclose: 1,
+						  	    todayHighlight: 1,
+						  	    startView: 2,
+						  	    minView: 2,
+						  	    forceParse: 0,
+						  	    format: "yyyy-mm-dd"
+						  	});
+				  	  	<#elseif prop.type == 'time'>
+					  	    $('#${prop.id}').datetimepicker({
+					  	      	language:  "zh-CN",
+						  	    weekStart: 1,
+						  	    todayBtn:  1,
+						  	    autoclose: 1,
+						  	    todayHighlight: 1,
+						  	    startView: 1,
+						  	    minView: 0,
+						  	    maxView: 1,
+						  	    forceParse: 0,
+						  	    format: 'hh:ii'
+						  	});
+				  	  	<#elseif prop.type == 'datetime'>
+					  		//初始化日期选择框
+							$('#${prop.id}').datetimepicker({
+							    weekStart: 1,
+							    todayBtn:  1,
+							    autoclose: 1,
+							    todayHighlight: 1,
+							    startView: 2,
+							    forceParse: 0,
+							    showMeridian: 1,
+							    format: "yyyy-mm-dd hh:ii"
+							});
+							
+							//初始化下拉选项的值
+				  	  	<#elseif prop.type == 'multiselect' || prop.type == 'select'>
+				  	  		<#if prop.datasource??>	
+					     		<#if prop.datasource.type == 'predefined'>
+					     			try{
+					     				var _value_${prop.id}_msg = '${prop.datasource.value?replace('\'','"')}';
+					     				var _value_${prop.id} = JSON.parse(_value_${prop.id}_msg);
+					     				if(_value_${prop.id} != undefined && _value_${prop.id} != null && _value_${prop.id}.length!=undefined){	
+					     					var hashAllFlag = false;		     					
+					     					for(var i = 0; i < _value_${prop.id}.length; i++){
+					     						if(_value_${prop.id}[i].id==-1||_value_${prop.id}[i].id==''||_value_${prop.id}[i].id=='-1'){hashAllFlag=true;}
+					     						$('#${prop.id}').append('<option value='+_value_${prop.id}[i].id+'>'+_value_${prop.id}[i].name+'</option>');
+					     					}
+					     					if(!hashAllFlag){
+					     						$('#${prop.id}').prepend('<option value="" selected>全部</option>');
+					     					}
+					     				}
+					     				//检查默认选项
+					     				var _value_${prop.id}_default_msg = "${prop.datasource.defaultvalue}"; 
+					     				if(_value_${prop.id}_default_msg != undefined && _value_${prop.id}_default_msg != null && _value_${prop.id}_default_msg != ''){
+					     					var defaultArray = _value_${prop.id}_default_msg.split('#');
+					     					if(defaultArray.length == 1){
+					     						$('#${prop.id}').val(defaultArray[0]);
+					     					}else if(defaultArray.length == 2){
+					     						if(defaultArray[1] == 'int'){
+					     							var _value = parseInt(defaultArray[0]);
+					     							$('#${prop.id}').val(_value);
+					     						}
+					     					}
+					     				}
+					     			}catch(e){}
+					     		<#elseif prop.datasource.type == 'ajax'>
+				     				var _value_${prop.id} = '${prop.datasource.value}';
+				     				var _value_split_${prop.id} = _value_${prop.id}.split(':');
+				     				doAjax(_value_split_${prop.id}[0],_value_split_${prop.id}[1],getFormValuesWithoutLimit('queryForm'),false,function(data){
+				     					try{
+				     						if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){
+				     							var hashAllFlag = false;			
+					     						$.each(data.data, function(i,n){	
+					     							if(n.id==-1||n.id==''||n.id=='-1'){hashAllFlag=true;}	     							
+					     							$('#${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+					     						});
+					     						if(!hashAllFlag){
+					     							$('#${prop.id}').prepend('<option value="" selected>全部</option>');
+					     						}
+					     					}
+				     					}catch(e){}finally{}		     					
+				     				});			     				
+					     		</#if>					     								     		
+					     	</#if>
+				  	  	</#if>
+				  	  </#if>
+					</#list>
+				</#if>
+			}
+			$(function(){   
+				<#if function.form??>
+					initQueryForm();
+					//初始化多选
+					$('#queryForm select.chosen-select').chosen({
+					    no_results_text: '',
+					    disable_search_threshold: 2,
+					    max_selected_options : 20,
+					    search_contains: true,
+					    allow_single_deselect : true
+					});			
+					
+					$("#queryForm select.chosen-select").change(function () {
+						//initQueryForm();
+				    });
+				</#if>
+			    resize();
+			    loadTimetable();
+			    
+			  	$('#closeQuerykc').click(function(){
+			  		$("#query").click();
+			  	});
+			    
+			    $(window).resize(function () { 
+			    	resize();
+			    });
+			});
+			
+			//为了兼容ModifyDefManager的修改
+			function getTableSelected() {
+				return null;
+			}
+			//为了兼容ModifyDefManager的修改
+			function list_query() {
+				 loadTimetable();
+			}
+		<#list function.operations as opt>
+			<#if opt.location == 'BATCH'>
+				function _click_${opt.id}(){
+					<#if opt.optTip?? && opt.optTip != ''>
+						$('#confirm').unbind('click');
+						$('#confirmcancel').unbind('click');
+						
+						$("#optTip").text('${opt.optTip}');
+						$('#confirmModal').modal({backdrop:'static',moveable:true,position:'fit'});
+						$('#confirm').click(function() {
+							$('#closeConfirmModal').click();
+							
+							var defaultQueryParams = {};
+							if(typeof(params)!='undefined' && params != null){defaultQueryParams=$.extend(defaultQueryParams,params);}
+							<#if opt.id == 'query'>
+							clicktbheard=false;
+							cstart = 0;
+							</#if>
+							<#if opt.type == 'JAVASCRIPT'>
+								${opt.value}
+							<#else>
+								forward('${opt.name}','${basePath}${opt.value}');
+							</#if>
+						});
+						$('#confirmcancel').click(function() {
+							$('#closeConfirmModal').click();
+						});
+					<#else>
+						var defaultQueryParams = {};
+						if(typeof(params)!='undefined' && params != null){defaultQueryParams=$.extend(defaultQueryParams,params);}
+						<#if opt.id == 'query'>
+						clicktbheard=false;
+						cstart = 0;
+						</#if>
+						<#if opt.type == 'JAVASCRIPT'>
+							${opt.value}
+						<#else>
+							forward('${opt.name}','${basePath}${opt.value}');
+						</#if>
+					</#if>
+				}
+			</#if>
+		</#list>		
+		</script>
+</html>

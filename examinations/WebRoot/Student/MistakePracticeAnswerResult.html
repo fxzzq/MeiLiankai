@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>错题练习答题结果</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="${basePath}_1/lib/mui/css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="${basePath}Student/css/AnswerResult.css" />
+		<script src="${basePath}_1/lib/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="${basePath}_1/lib/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="${basePath}_1/js/Outside.js"></script>
+		<script type="text/javascript" src="${basePath}_1/js/Overall.js"></script>
+		<script type="text/javascript" src="${basePath}_1/js/StorageKeys.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		<button type="button" class="mui-left mui-action-back mui-btn  mui-btn-link mui-btn-nav mui-pull-left">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+				</button>
+			<h1 class="mui-title">答题结果</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="paperset">
+				<p id="title">受力分析随堂练习A</p>
+
+			</div>
+			<div class="countResult">
+				<p>对/错:&nbsp;<span class="success">2</span><span>/</span><span class="error">1</span></p>
+			</div>
+
+			<ul class="mui-table-view ">
+				 <li class="mui-table-view-cell">
+					
+					<div class="mui-table">
+						<div class="mui-table-cell mui-col-xs-10 listfont">
+		                   <span>1.</span>
+		                 <span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="0" type="radio" disabled="disabled">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="0" type="radio" disabled="disabled" >
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="0" type="radio" disabled="disabled">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="0" type="radio" checked="checked" >
+
+					</div>
+		                 
+		                 
+		                 
+		                   
+		                   
+		                </div>
+						  <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5 success">对</span>
+		                </div>
+					</div>
+					
+				</li>
+
+				<li class="mui-table-view-cell">
+					<div class="mui-table">
+						<div class="mui-table-cell mui-col-xs-10 listfont">
+		                   <span>2.</span>
+		                 <span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="1" type="radio" disabled="disabled">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="1" type="radio" disabled="disabled" >
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="1" type="radio"  checked="checked" >
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="1" type="radio" disabled="disabled" >
+
+					</div>
+		                            
+		                   
+		                </div>
+						  <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5 error">错</span>
+		                </div>
+					</div>
+					
+				</li>
+
+					<li class="mui-table-view-cell">
+					
+						<div class="mui-table">
+						<div class="mui-table-cell mui-col-xs-10 listfont">
+		                   <span>3.</span>
+		                 <span>下列单位中，是物理功率单位的是</span>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+
+						<label>A.N</label>
+						<input name="2" type="radio" disabled="disabled">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label >B.s</label>
+						<input name="2" type="radio" disabled="disabled" >
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>C.J</label>
+						<input name="2" type="radio" disabled="disabled">
+					</div>
+					<div class="mui-input-row mui-radio mui-left listfont2">
+						<label>D.W</label>
+						<input name="2" type="radio" checked="checked" >
+
+					</div>
+		                 
+		                 
+		                 
+		                   
+		                   
+		                </div>
+						  <div class="mui-table-cell mui-col-xs-2 mui-text-right">
+		                    <span class="mui-h5 success">对</span>
+		                </div>
+					</div>
+					
+				</li> 
+			</ul>
+
+		</div>
+
+		<script type="text/javascript">
+			mui.init();
+			var array2radio=new Array();
+			var checkboxarray2=new Array();
+			var radioanswer=new Array();
+			var checkboxanswer=new Array();
+		  //学生答题结果
+		array2radio=storage.getItem($LOCALKAY_STUDENT_MISTAKEANSWER_ARRAYRADIO);
+		checkboxarray2=storage.getItem($LOCALKAY_STUDENT_MISTAKEANSWER_ARRAYCHECKBOX);
+		alert("学生单选结果:"+array2radio);
+		alert("学生多选结果:"+checkboxarray2);
+		  //正确答案
+		radioanswer=storage.getItem($LOCALKAY_STUDENT_MISTAKEANSWER_RADIOANSWER);
+		checkboxanswer=storage.getItem($LOCALKAY_STUDENT_MISTAKEANSWER_CHECKBOXANSWER);
+		alert("正确单选答案:"+radioanswer);
+		alert("正确多选答案:"+checkboxanswer);
+		
+		   
+		
+		
+		
+		</script>
+	</body>
+
+</html>

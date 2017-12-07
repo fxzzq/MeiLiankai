@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="platform-core-processor"/>
+	<classpathentry kind="src" path="platform-core-template"/>
+	<classpathentry kind="src" path="platform-core-template-resource"/>
+	<classpathentry kind="src" path="platform-core-web"/>
+	<classpathentry kind="src" path="platform-core-web-resource"/>
+	<classpathentry kind="src" path="platform-core-security"/>
+	<classpathentry kind="src" path="platform-core-security-resource"/>
+	<classpathentry kind="src" path="platform-core-function"/>
+	<classpathentry kind="src" path="platform-core-function-resource"/>
+	<classpathentry kind="src" path="platform-component-weixin"/>
+	<classpathentry kind="src" path="platform-component-weixin-resource"/>
+	<classpathentry kind="src" path="platform-core-utils"/>
+	<classpathentry kind="src" path="proj-examinations"/>
+	<classpathentry kind="src" path="proj-examinations-resource"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_6_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>

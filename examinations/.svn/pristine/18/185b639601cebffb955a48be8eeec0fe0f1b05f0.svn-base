@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class entity-name="resource.proj.examinations.mistakes" table="TB_PROJ_EXAMINATIONS_MISTAKES">
+		<id name="uuid" type="string" column="uuid" length="256"></id>
+		<property name="account" type="string" column="account" length="16"/><!-- 帐号 -->
+		<property name="type" type="string" column="type" length="256"/><!-- 关键字 -->
+		<property name="stem" type="text" column="stem"/><!-- 题干 -->
+		<property name="content" type="text" column="content"/><!-- 选项 -->
+		<property name="analysis" type="text" column="analysis"/><!-- 解析 -->
+		<property name="answer" type="string" column="answer" length="16"/><!-- 试题答案 -->
+		<property name="multi" type="java.lang.Boolean" column="multi" /><!-- 是否多选 -->
+		<property name="lastanswer" type="java.lang.Boolean">
+			<column name="lastanswer" default="1"></column>
+		</property>
+		<property name="lasttime" type="string" column="lasttime" length="16"/><!-- 上一次答题时间 -->
+	</class>
+	
+</hibernate-mapping>

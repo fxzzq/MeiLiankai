@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>${name}</title>
+		<!-- ZUI 标准版压缩后的 CSS 文件 -->
+		<#include "_import/import_css.html">
+		<style>
+			.container {
+				max-width: 100%;
+				padding-left:20px;
+				padding-right: 20px;
+				padding-top:40px;
+			}
+			.btn-success {
+				min-width: 80px;
+				color:#FFFFFF;
+			}
+			form {
+				max-width:600px;
+			}
+			.form-horizontal .form-group>label{
+				color:#293133;
+				font-weight:normal;
+			}
+			.form-control{
+				font-size:12px;
+				color:#333333;
+			}
+			/* .form-control:focus{
+				border:1px solid #cc5252;
+			} */
+			.form-group {
+			    margin-bottom: 15px;
+			}
+			.btn{
+				margin-right:10px; 
+			}
+			.col-lg-2 {
+				padding:0;
+			}
+			.btn-cancel{
+			    width: 17px;
+			    height: 17px;
+			    margin-top:2px;
+			    display: block;
+			    float: left;
+				background:url(${basePath}_1/image/button-ico/cancel.png) no-repeat;
+			}
+			
+			.btn-submit{
+			    width: 17px;
+			    height: 17px;
+			    margin-top:2px;
+			    display: block;
+			    float: left;
+				background:url(${basePath}_1/image/button-ico/submit.png) no-repeat;
+			}
+		</style>
+	</head>
+	<body>		
+		<div class="container">
+			<form class="form-horizontal" id="addForm">
+			  <#list form as prop>
+			  	  <#if prop.show4create>
+			  	  	<#if prop.type == 'input'>
+			  	  		<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						      <input maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>			      
+						    </div>
+						  </div>
+				    <#elseif prop.type == 'password'>
+			  	  		<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						      <input type='password' maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>			      
+						    </div>
+						  </div>
+					<#elseif prop.type == 'textarea'>
+			  	  		<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						      <textarea maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"></textarea>			      
+						    </div>
+						  </div>
+					<#elseif prop.type == 'multiselect' || prop.type == 'select'>
+						<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						    	<select <#if prop.type == 'multiselect'> multiple="multiple" </#if> class="form-control chosen-select" id="${prop.id}" onchange="validate('${prop.id}')">						    		
+						    	</select>
+						    </div>
+						  </div>
+					<#elseif prop.type == 'number'>
+						<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						    	 <input maxlength="${prop.maxlength}" <#if prop.datasource?? && prop.datasource.defaultvalue??>value="${prop.datasource.defaultvalue}"</#if> type="number" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>			      
+						    </div>
+						  </div>
+			  	  	<#elseif prop.type == 'date'>
+			  	  		<div class="form-group" id="${prop.id}_form_group">
+			  	  			<label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+			  	  			<div class="col-lg-8 col-md-8">		 				
+			    				<input readonly="readonly" id="${prop.id}" type="text" class="form-date form-control" style="border-radius:4px;background-color:#ffffff;">	
+							</div>
+						</div>
+					<#else>
+						<div class="form-group" id="${prop.id}_form_group">
+						    <label class="col-lg-4 col-md-4">${prop.name}<#if prop.required><span style="color:red;">*</span></#if>：</label>
+						    <div class="col-lg-8 col-md-8">
+						      <input maxlength="${prop.maxlength}" type="text" class="form-control" id="${prop.id}" placeholder="${prop.name}" onfocus="validate('${prop.id}')" oninput="validate('${prop.id}')"/>			      
+						    </div>
+						  </div>
+			  	  	</#if>			  	  	
+			  	  </#if>			  	  
+			  </#list>
+			  <div class="form-group" style="padding-top:15px;">
+			    <div class="col-md-offset-4 col-md-12">
+			      <button type="button" class="btn btn-success" id="todo"><i class="iconfont icon-queren" style="margin-right:3px;font-size:12px;"></i>确定</button>
+			      <button type="button" class="btn btn-success" id="cancel"><i class="iconfont icon-quxiao" style="margin-right:3px;font-size:12px;"></i>取消</button>
+			    </div>
+			  </div>
+			</form>
+		</div>		
+	</body>
+	<script type="text/javascript">
+	var $basePath = '${basePath}';
+	</script>
+	<#include "_import/import_javascript.html">
+	<script type="text/javascript">
+		var fid = '${id}';
+		var opt = 'if4add';
+		var add_action_url = '';		
+		var _thisform = [
+			<#list form as prop>
+				<#if prop_index == 0>
+				<#else>
+					,
+				</#if>
+				{
+					id:"${prop.id}",
+					name:"${prop.name}",
+					validates : [
+						<#list prop.validates as validate>
+							<#if validate_index == 0>
+							<#else>
+								,
+							</#if>
+							{
+								type : "${validate.type}",
+								exp : "${validate.exp}",
+								emsg : "${validate.emsg}"
+							}
+						</#list>
+					]
+				}
+			</#list>			
+		];	
+		
+		//验证表单
+		function validate(id){
+			if(id != undefined){
+				var validates = null;
+				$.each(_thisform,function(){
+					if(this.id == id){
+						validates = this.validates;
+					}
+				});
+				if(validates != null){
+					$.each(validates, function(index, validate){
+						if(this.type == 'reg'){//判断正则表达式
+							if(!regularMatch($('#'+id).val(),this.exp)){
+								$('#'+id+'_form_group').removeClass('has-error');
+								$('#'+id+'_form_group').addClass('has-error');
+								$('#'+id).nextAll('label').remove();
+								$('#'+id).parent().append('<label class="has-error" style="color:#ea644a">'+this.emsg+'</label>');
+								$('#'+id+'_form_group').css('margin-bottom','0px');
+								return false;
+							}else{
+								$('#'+id+'_form_group').removeClass('has-error');
+								$('#'+id).nextAll('label').remove();
+								$('#'+id+'_form_group').css('margin-bottom','15px');
+							}		
+						}else if(this.type == 'ajax'){//后台验证
+							var expsplit = this.exp.split(':');
+							var _params = {};
+							_params.fid = expsplit[0];
+							_params.opt = expsplit[1];
+							_params[id+''] = $('#'+id).val();
+							var final_add_path = opt_ajax_action_url;
+							if(add_action_url != undefined && add_action_url != null && add_action_url != ''){
+								final_add_path = add_action_url;
+							}
+							doAjaxFromUrl(final_add_path,_params,false,function(data){
+								if(data.success){//验证成功
+									$('#'+id+'_form_group').removeClass('has-error');
+									$('#'+id).nextAll('label').remove();
+									$('#'+id+'_form_group').css('margin-bottom','0px');
+									return false;
+								}else{
+									$('#'+id+'_form_group').removeClass('has-error');
+									$('#'+id+'_form_group').addClass('has-error');
+									$('#'+id).nextAll('label').remove();
+									$('#'+id).parent().append('<label class="has-error" style="color:#ea644a">'+validate.emsg+'</label>');
+									$('#'+id+'_form_group').css('margin-bottom','15px');
+								}
+							});
+						}
+						else if(this.type == 'script'){
+							if(!eval(this.exp)){
+								$('#'+id+'_form_group').removeClass('has-error');
+								$('#'+id+'_form_group').addClass('has-error');
+								$('#'+id).nextAll('label').remove();
+								$('#'+id).parent().append('<label class="has-error" style="color:#ea644a">'+this.emsg+'</label>');
+								$('#'+id+'_form_group').css('margin-bottom','0px');
+								return false;
+							}else{
+								$('#'+id+'_form_group').removeClass('has-error');
+								$('#'+id).nextAll('label').remove();
+								$('#'+id+'_form_group').css('margin-bottom','15px');
+							}		
+						}
+					});
+				}
+			}	
+		}
+		
+		//提交表单
+		function doSubmit(){
+			//获取error
+			if($('#addForm label.has-error') != undefined && $('#addForm label.has-error').length > 0){
+				return;
+			}
+			//获取input的List表单			
+			var _params = getFormValuesWithoutLimit('addForm');
+			_params.fid = fid;
+			_params.opt = opt;
+			
+			var final_add_path = opt_ajax_action_url;
+			if(add_action_url != undefined && add_action_url != null && add_action_url != ''){
+				final_add_path = add_action_url;
+			}
+			
+			doAjaxFromUrl(final_add_path,_params,true,function(data){
+					if(data.success){
+						alertSuccess('更新成功!');
+						_prePath(false);
+						//window.location.href = '${basePath}function/message4success.do';
+					}else{
+						var errorMessage = data.emsg;
+						//打印详细
+						if(typeof(data.validateDetail) != 'undefined' && data.validateDetail.length > 0){
+							for(var i = 0; i < data.validateDetail.length; i++){
+								$('#'+data.validateDetail[i].pid).addClass('has-error');
+								errorMessage = errorMessage + '<br/>' + data.validateDetail[i].emsg;
+							}
+						}
+					
+						alertError(errorMessage);
+						//判断是否为参数验证
+						if(data.ecode == 'validate_999999' || (typeof(data.validateDetail) != 'undefined' && data.validateDetail.length > 0)){
+							for(var i = 0; i < data.validateDetail.length; i++){
+								var one = data.validateDetail[i];
+								if(one.success){continue;}
+								$('#'+one.pid+'_form_group').removeClass('has-error');
+								$('#'+one.pid+'_form_group').addClass('has-error');
+								$('#'+one.pid).nextAll('label').remove();
+								$('#'+one.pid).parent().append('<label class="has-error" style="color:#ea644a">'+one.emsg+'</label>');
+								$('#'+one.pid+'_form_group').css('margin-bottom','0px');
+							}
+						}						
+					}
+				},function(){alertError('未知错误!');});			
+		}
+		$(document).ready(function(){
+			try{
+				initLoading();
+				showLoading('提示','数据加载中...');
+			}catch(e){}
+			//添加监听
+			$('#cancel').on('click',function(){
+				_prePath(false);
+			});
+			$('#todo').on('click',function(){
+				doSubmit();
+			});
+			
+			//初始化日期选择
+			<#list form as prop>
+		  	  <#if prop.show4create>
+		  	  	<#if prop.type == 'date'>
+			  	  	$('#${prop.id}').datetimepicker({
+				  	  	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 2,
+				  	    minView: 2,
+				  	    forceParse: 0,
+				  	    format: "yyyy-mm-dd"
+				  	}).on('changeDate',function(ev){
+				  		validate('${prop.id}');			
+					});					
+		  	  	<#elseif prop.type == 'time'>
+			  	    $('#${prop.id}').datetimepicker({
+			  	      	language:  "zh-CN",
+				  	    weekStart: 1,
+				  	    todayBtn:  1,
+				  	    autoclose: 1,
+				  	    todayHighlight: 1,
+				  	    startView: 1,
+				  	    minView: 0,
+				  	    maxView: 1,
+				  	    forceParse: 0,
+				  	    format: 'hh:ii'
+				  	}).on('changeDate',function(ev){
+				  		validate('${prop.id}');			
+					});	;					
+		  	  	<#elseif prop.type == 'datetime'>
+			  		//初始化日期选择框
+					$('#${prop.id}').datetimepicker({
+					    weekStart: 1,
+					    todayBtn:  1,
+					    autoclose: 1,
+					    todayHighlight: 1,
+					    startView: 2,
+					    forceParse: 0,
+					    showMeridian: 1,
+					    format: "yyyy-mm-dd hh:ii"
+					}).on('changeDate',function(ev){
+				  		validate('${prop.id}');			
+					});					
+					//初始化下拉选项的值
+		  	  	<#elseif prop.type == 'multiselect' || prop.type == 'select'>
+		  	  		<#if prop.datasource??>	
+			     		<#if prop.datasource.type == 'predefined'>
+			     			try{
+			     				var _value_${prop.id}_msg = '${prop.datasource.value?replace('\'','"')}';
+			     				var _value_${prop.id} = [];
+			     				try{
+			     					var _value_${prop.id} = JSON.parse(_value_${prop.id}_msg);
+			     				}catch(e){
+			     					var _value_${prop.id} = eval(_value_${prop.id}_msg);
+			     				}
+			     				if(_value_${prop.id} != undefined && _value_${prop.id} != null && _value_${prop.id}.length!=undefined){			     					
+			     					$('#${prop.id}').append('<option value=""></option>');
+			     					for(var i = 0; i < _value_${prop.id}.length; i++){
+			     						$('#${prop.id}').append('<option value='+_value_${prop.id}[i].id+' selected>'+_value_${prop.id}[i].name+'</option>');
+			     					}
+			     				}
+			     				//检查默认选项
+			     				var _value_${prop.id}_default_msg = "${prop.datasource.defaultvalue}"; 
+			     				if(_value_${prop.id}_default_msg != undefined && _value_${prop.id}_default_msg != null && _value_${prop.id}_default_msg != ''){
+			     					var defaultArray = _value_${prop.id}_default_msg.split('#');
+			     					if(defaultArray.length == 1){
+			     						$('#${prop.id}').val(defaultArray[0]);
+			     					}else if(defaultArray.length == 2){
+			     						if(defaultArray[1] == 'int'){
+			     							var _value = parseInt(defaultArray[0]);
+			     							$('#${prop.id}').val(_value);
+			     						}
+			     					}
+			     				}
+			     			}catch(e){alert(e);}
+			     		<#elseif prop.datasource.type == 'ajax'>
+		     				var _value_${prop.id} = '${prop.datasource.value}';
+		     				var _value_split_${prop.id} = _value_${prop.id}.split(':');
+		     				
+		     				//首先页面数据库中获取信息
+		     				var _value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data = null;
+		     				if(hasLocalStorage('${(prop.datasource.value?replace('.','_'))?replace(':','_')}') && typeof(getLocalStorage()) != 'undefined' && getLocalStorage()!=null){//基础数据
+		     					var dataMessage = '';
+		     					try{
+		     						dataMessage = getLocalStorage().getItem('${(prop.datasource.value?replace('.','_'))?replace(':','_')}');
+		     					}catch(e){}
+		     					if(dataMessage != '' && dataMessage != null){
+		     						var data = JSON.parse(dataMessage);
+		     						if(data.length > 0){
+		     							_value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data = data;
+		     							$('#${prop.id}').append('<option value=""></option>');
+		     							$.each(data, function(i,n){		     									     							
+			     							$('#${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+			     						});
+		     						}
+		     					}
+		     				}
+		     				
+		     				if(_value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data == null || _value_${(prop.datasource.value?replace('.','_'))?replace(':','_')}_ajax_data.length == 0){
+		     					doAjax(_value_split_${prop.id}[0],_value_split_${prop.id}[1],{limit:99999},false,function(data){
+		     						try{
+		     							if(data != undefined && data.success != null && data.data != undefined && data.data.length != undefined){		     					
+			     							$('#${prop.id}').append('<option value=""></option>');
+			     							$.each(data.data, function(i,n){		     							
+			     								$('#${prop.id}').append('<option value="'+n.id+'" '+n.seleced+'>'+n.name+'</option>');
+			     							});
+			     							if(hasLocalStorage('${(prop.datasource.value?replace('.','_'))?replace(':','_')}') && typeof(getLocalStorage()) != 'undefined' && getLocalStorage()!=null && data.data.length > 0){
+			     								getLocalStorage().setItem('${(prop.datasource.value?replace('.','_'))?replace(':','_')}', JSON.stringify(data.data));
+			     							}
+			     						}
+		     						}catch(e){}finally{}		     					
+		     					});
+		     				}
+		     						     					     				    			
+			     		</#if>					     								     		
+			     	</#if>
+		  	  	</#if>
+		  	  </#if>
+			</#list>
+			
+			$('select.chosen-select').chosen({
+			    no_results_text: '',
+			    disable_search_threshold: 2,
+			    max_selected_options : 20,
+			    search_contains: true,
+			    allow_single_deselect : true
+			});
+			${onnewpageready!}
+			$('body').keydown(function(event){
+				var e = event || window.event || arguments.callee.caller.arguments[0];
+				if(e && e.keyCode==13){
+					return false;
+				}
+			});
+			try{hideLoading();}catch(e){}
+		});	
+	</script>
+</html>

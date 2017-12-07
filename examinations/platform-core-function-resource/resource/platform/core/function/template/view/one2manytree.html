@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>权限管理</title>
+<!-- 引入JQuery -->
+  <script type="text/javascript" src="${basePath}/_1/lib/easyui/jquery.min.js"></script>
+  <!-- 引入EasyUI -->
+  <script type="text/javascript" src="${basePath}/_1/lib/easyui/jquery.easyui.min.js"></script>
+  <!-- 引入EasyUI的样式文件-->
+  <link rel="stylesheet" href="${basePath}/_1/lib/easyui/themes/bootstrap/easyui.css" type="text/css"/>
+  <!-- 引入EasyUI的图标样式文件-->
+  <link rel="stylesheet" href="${basePath}/_1/lib/easyui/themes/icon.css" type="text/css"/>
+  <link rel="stylesheet" href="${basePath}_1/css/loading.css"/>
+</head>
+<body>
+<#-- 属性节点递归宏 -->
+<#macro bpTree node>
+<li id="${node.id}" data-options="<#if node.checked?? && node.checked=1>checked:true</#if>">
+	<span>${node.name}</span>
+	<#if node.children?? && node.children?size gt 0>
+	<#list node.children as child>
+    <ul>
+    	<@bpTree node=child/>
+    </ul>
+    </#list>
+    </#if>
+</li>
+</#macro>
+<div id="tree">
+<ul>
+	<#if menus?? && menus?size gt 0>
+		<@bpTree node=menus/>
+	</#if>
+</ul>
+</div>
+</body>
+<script type="text/javascript">
+var $basePath = '${basePath}';
+</script>
+<script type="text/javascript" src="${basePath}_1/js/Overall.js"></script>
+<script type="text/javascript" src="${basePath}_1/js/Outside.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tree ul").tree({  
+		checkbox:true,
+    	onCheck:function(node){  
+        	//获取所有的已选中菜单
+        	var selected = $('#tree ul').tree('getChecked');
+        	var ids = [];
+        	if(typeof(selected) != 'undefined'){
+        		for(var i = 0; i < selected.length; i++){
+        			ids[ids.length] = parseInt(selected[i].id.replace(/,/,''));
+        		}
+        	}
+        	doAjax('${fid}','${optupdate}',{magicboy:'no',manyid:ids,oneid:${id}},true,function(data){
+        		if(data.success){
+        			$.messager.show({  
+            			title:'提示',  
+            			msg:'权限更新成功!',  
+            			timeout:5000,  
+            			showType:'slide' ,
+            				style:{
+								right:'',
+								top:document.body.scrollTop+document.documentElement.scrollTop,
+								bottom:''
+							} 
+        			}); 
+        		}else{
+        			$.messager.show({  
+            			title:'警告',  
+            			msg:'权限更新失败!',  
+            			timeout:5000,  
+            			showType:'slide'  
+        			});
+        		}
+        	});
+        }  
+    }); 
+});
+</script>
+</html>
